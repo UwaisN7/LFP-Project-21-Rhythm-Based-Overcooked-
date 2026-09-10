@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
-
+ 
 /// <summary>
 /// Builds the queue of AnswerPrompts for an ingredient.
 /// The ingredient hands this a fixed pattern (e.g. Up, Up, Left, Right)
@@ -11,27 +11,45 @@ public class AnswerMaker : MonoBehaviour
 {
     [Tooltip("How many beats from 'now' the first prompt should land on. Gives the player reaction time.")]
     [SerializeField] private int leadInBeats = 2;
-
+ 
+    private static readonly RhythmDirection[] AllDirections =
+        (RhythmDirection[])System.Enum.GetValues(typeof(RhythmDirection));
+ 
     public Queue<AnswerPrompt> GenerateSequence(RhythmDirection[] pattern, MusicClock clock)
     {
         var prompts = new Queue<AnswerPrompt>();
-
+ 
         if (clock == null || pattern == null || pattern.Length == 0)
         {
             Debug.LogWarning("AnswerMaker: missing clock or empty pattern.");
             return prompts;
         }
-
+ 
         int startBeat = clock.CurrentBeat + leadInBeats;
-
+ 
         for (int i = 0; i < pattern.Length; i++)
         {
             int beatIndex = startBeat + i;
             double targetTime = clock.BeatToSongTime(beatIndex);
-
+ 
             prompts.Enqueue(new AnswerPrompt(pattern[i], targetTime, beatIndex));
         }
-
+ 
         return prompts;
+    }
+ 
+    /// <summary>
+    /// Placeholder pattern generator for testing before ingredient data exists.
+    /// Once ingredients feed real patterns into GenerateSequence, this just
+    /// sits unused as a debug helper - nothing to delete.
+    /// </summary>
+    public RhythmDirection[] GenerateRandomPattern(int length)
+    {
+        var pattern = new RhythmDirection[length];
+        for (int i = 0; i < length; i++)
+        {
+            pattern[i] = AllDirections[Random.Range(0, AllDirections.Length)];
+        }
+        return pattern;
     }
 }
