@@ -6,7 +6,7 @@ using UnityEngine;
 /// The ingredient hands this a fixed pattern (e.g. Up, Up, Left, Right)
 /// and this schedules one prompt per upcoming beat, starting a couple
 /// of beats in the future so the player has reaction time.
-/// </summary>
+
 public class AnswerMaker : MonoBehaviour
 {
     [Tooltip("How many beats from 'now' the first prompt should land on. Gives the player reaction time.")]

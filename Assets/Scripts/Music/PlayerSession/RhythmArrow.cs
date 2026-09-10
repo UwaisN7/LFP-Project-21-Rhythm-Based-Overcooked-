@@ -11,7 +11,7 @@ using UnityEngine.UI;
 public class RhythmArrow : MonoBehaviour
 {
     [Header("Result colors")]
-    [SerializeField] private Graphic visual;          // Image or other Graphic tinted on result
+    [SerializeField] private Material visual;         
     [SerializeField] private Color onBeatColor = Color.green;
     [SerializeField] private Color wrongColor = Color.red;
     [SerializeField] private Color lateColor = Color.gray;
@@ -64,6 +64,7 @@ public class RhythmArrow : MonoBehaviour
         {
             switch (result)
             {
+                case AnswerPrompt.Result.Early: Destroy(gameObject); break;
                 case AnswerPrompt.Result.OnBeat: visual.color = onBeatColor; break;
                 case AnswerPrompt.Result.Wrong: visual.color = wrongColor; break;
                 case AnswerPrompt.Result.Late: visual.color = lateColor; break;

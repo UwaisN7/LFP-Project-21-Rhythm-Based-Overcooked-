@@ -28,7 +28,7 @@ public class PlayerRhythmSession : MonoBehaviour
     private void Update()
     {
         if (!useRandomDebugInput) return;
-
+        //This is the start point
         Gamepad pad = targetGamepad != null ? targetGamepad : Gamepad.current;
         if (pad != null && pad.bButton.wasPressedThisFrame)
         {

@@ -8,11 +8,11 @@ using System;
 [Serializable]
 public class AnswerPrompt
 {
-    public enum Result { Pending, OnBeat, Late, Wrong }
+    public enum Result { Early,Pending, OnBeat, Late, Wrong }
 
     public RhythmDirection RequiredDirection;
-    public double TargetSongTime;   // The SongTime (seconds) this input should land on
-    public int TargetBeat;          // Which beat this is, handy for debug/UI
+    public double TargetSongTime;  
+    public int TargetBeat;        
     public Result CurrentResult = Result.Pending;
 
     public AnswerPrompt(RhythmDirection direction, double targetSongTime, int targetBeat)

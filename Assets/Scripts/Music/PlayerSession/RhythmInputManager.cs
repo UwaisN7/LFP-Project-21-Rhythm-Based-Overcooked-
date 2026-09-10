@@ -9,10 +9,10 @@ using UnityEngine.InputSystem;
 /// </summary>
 public class RhythmInputManager : MonoBehaviour
 {
-    [Tooltip("Assign a specific gamepad for split-screen multiplayer. Leave empty to use whichever pad is current.")]
+   
     [SerializeField] private Gamepad targetGamepad;
 
-    [Tooltip("Needed to timestamp presses in SongTime, not just real time.")]
+  
     [SerializeField] private MusicClock musicClock;
 
     public event System.Action<RhythmDirection, double> OnDirectionPressed;

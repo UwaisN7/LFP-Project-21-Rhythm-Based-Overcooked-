@@ -88,6 +88,11 @@ public class RhythmEvaluator : MonoBehaviour
 
         switch (result)
         {
+            case AnswerPrompt.Result.Early:
+                pointManager?.AddActionPoints(playerId, 0);
+                Debug.Log("`Plyaer hit early no penalty but no points");
+                break;
+
             case AnswerPrompt.Result.OnBeat:
                 pointManager?.AddActionPoints(playerId, 25);
                 Debug.Log("Added Points");
