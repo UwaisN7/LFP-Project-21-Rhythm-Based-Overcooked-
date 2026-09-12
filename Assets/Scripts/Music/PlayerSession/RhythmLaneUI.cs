@@ -1,37 +1,24 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-/// <summary>
-/// Visualises the current prompt queue: arrows travel from the spawn
-/// point to the hit line, timed to arrive exactly on their target beat.
-/// It reads the same AnswerPrompt data the Evaluator judges, and only
-/// ever reflects the Evaluator's decision - it never makes hit/miss
-/// calls of its own.
-/// </summary>
 public class RhythmLaneUI : MonoBehaviour
 {
     [Header("Refs")]
     [SerializeField] private MusicClock musicClock;
     [SerializeField] private RhythmEvaluator evaluator;
-    [SerializeField] private RhythmArrow arrowPrefab;
-    [SerializeField] private RectTransform laneParent;
 
-    [Header("Layout")]
-    [Tooltip("X position (local to laneParent) where arrows spawn.")]
-    [SerializeField] private float spawnX = -500f;
-    [Tooltip("X position where arrows should be hit. Swap spawnX/hitX if you want them travelling right-to-left instead.")]
-    [SerializeField] private float hitX = 500f;
-    [Tooltip("Seconds an arrow spends travelling before it reaches the hit line.")]
+    [Tooltip("Optional parent for spawned arrows. If null, arrows are spawned at the scene root.")]
+    [SerializeField] private Transform laneParent;
+
+    [Header("Layout (empty transforms)")]
+    [SerializeField] private Transform spawnPoint;
+    [SerializeField] private Transform hitLine;
     [SerializeField] private float travelTimeSeconds = 1.5f;
 
-    [Header("Direction prefabs (GameObjects)")]
-    [Tooltip("Prefab spawned for an Up prompt. Should contain a RhythmArrow component.")]
+    [Header("Direction prefabs (GameObjects with RhythmArrow)")]
     [SerializeField] private GameObject upPrefab;
-    [Tooltip("Prefab spawned for a Down prompt. Should contain a RhythmArrow component.")]
     [SerializeField] private GameObject downPrefab;
-    [Tooltip("Prefab spawned for a Left prompt. Should contain a RhythmArrow component.")]
     [SerializeField] private GameObject leftPrefab;
-    [Tooltip("Prefab spawned for a Right prompt. Should contain a RhythmArrow component.")]
     [SerializeField] private GameObject rightPrefab;
 
     private readonly List<RhythmArrow> activeArrows = new List<RhythmArrow>();
@@ -52,18 +39,21 @@ public class RhythmLaneUI : MonoBehaviour
     {
         if (prompts == null) return;
 
-        if (musicClock == null || laneParent == null)
+        if (musicClock == null || spawnPoint == null || hitLine == null)
         {
-            Debug.LogError($"{nameof(RhythmLaneUI)}: musicClock or laneParent is not assigned in the Inspector.", this);
+            Debug.LogError($"{nameof(RhythmLaneUI)}: missing musicClock / spawnPoint / hitLine.", this);
             return;
         }
+
+        Vector3 spawnPos = GetPos(spawnPoint);
+        Vector3 hitPos = GetPos(hitLine);
 
         foreach (AnswerPrompt prompt in prompts)
         {
             GameObject prefab = PrefabFor(prompt.RequiredDirection);
             if (prefab == null)
             {
-                Debug.LogError($"{nameof(RhythmLaneUI)}: no prefab assigned for direction {prompt.RequiredDirection}.", this);
+                Debug.LogError($"{nameof(RhythmLaneUI)}: no prefab for direction {prompt.RequiredDirection}.", this);
                 continue;
             }
 
@@ -75,11 +65,19 @@ public class RhythmLaneUI : MonoBehaviour
                 continue;
             }
 
-            float spawnTime = (float)(prompt.TargetSongTime - travelTimeSeconds);
-            arrow.Setup(prompt, musicClock, spawnTime, spawnX, hitX);
+            double spawnTime = prompt.TargetSongTime - travelTimeSeconds;
+            arrow.Setup(prompt, musicClock, spawnTime, spawnPos, hitPos);
 
             activeArrows.Add(arrow);
         }
+    }
+
+    private Vector3 GetPos(Transform t)
+    {
+        if (t is RectTransform rt)
+            return new Vector3(rt.anchoredPosition.x, rt.anchoredPosition.y, 0f);
+
+        return t.position;
     }
 
     private GameObject PrefabFor(RhythmDirection direction)

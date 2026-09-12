@@ -24,13 +24,26 @@ public class PlayerRhythmSession : MonoBehaviour
     [SerializeField] private bool useRandomDebugInput = true;
     [SerializeField] private Gamepad targetGamepad;
     [SerializeField] private int debugPatternLength = 4;
+    private bool sessionActive;
 
+
+    private void OnEnable()
+    {
+        evaluator.OnSequenceComplete += HandleSequenceComplete;
+        evaluator.OnIngredientBurned += HandleIngredientBurned;
+    }
+
+    private void OnDisable()
+    {
+        evaluator.OnSequenceComplete -= HandleSequenceComplete;
+        evaluator.OnIngredientBurned -= HandleIngredientBurned;
+    }
     private void Update()
     {
         if (!useRandomDebugInput) return;
         //This is the start point
         Gamepad pad = targetGamepad != null ? targetGamepad : Gamepad.current;
-        if (pad != null && pad.bButton.wasPressedThisFrame)
+        if (pad != null && pad.bButton.wasPressedThisFrame && !sessionActive)
         {
             RhythmDirection[] pattern = answerMaker.GenerateRandomPattern(debugPatternLength);
             BeginSequence(pattern);
@@ -40,11 +53,20 @@ public class PlayerRhythmSession : MonoBehaviour
     public void BeginSequence(RhythmDirection[] pattern)
     {
         Queue<AnswerPrompt> sequence = answerMaker.GenerateSequence(pattern, musicClock);
-
+        sessionActive = true;
         // Snapshot for the UI before the evaluator starts consuming the queue.
         List<AnswerPrompt> promptList = sequence.ToList();
 
         evaluator.BeginSequence(sequence);
         laneUI?.Display(promptList);
+    }
+    private void HandleSequenceComplete()
+    {
+        sessionActive = false;
+    }
+
+    private void HandleIngredientBurned()
+    {
+        sessionActive = false;
     }
 }

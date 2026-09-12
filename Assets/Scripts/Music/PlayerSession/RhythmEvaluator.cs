@@ -26,7 +26,7 @@ public class RhythmEvaluator : MonoBehaviour
 
     public event System.Action<AnswerPrompt> OnPromptResolved;
     public event System.Action OnIngredientBurned;
-
+    public event System.Action OnSequenceComplete;
     private Queue<AnswerPrompt> activePrompts = new Queue<AnswerPrompt>();
     private int strikes = 0;
 
@@ -68,9 +68,13 @@ public class RhythmEvaluator : MonoBehaviour
         AnswerPrompt current = activePrompts.Peek();
         double diff = songTimeOfPress - current.TargetSongTime;
 
-        // Too early to judge yet -- ignore entirely, no penalty, prompt stays active.
+      
         if (diff < -hitWindowSeconds)
-            return;
+        {
+            Resolve(current, AnswerPrompt.Result.Early);
+             return;
+        }
+           
 
         if (direction != current.RequiredDirection)
         {
@@ -83,8 +87,12 @@ public class RhythmEvaluator : MonoBehaviour
 
     private void Resolve(AnswerPrompt prompt, AnswerPrompt.Result result)
     {
-        prompt.CurrentResult = result;
         activePrompts.Dequeue();
+
+        if (activePrompts.Count == 0)
+        {
+            OnSequenceComplete?.Invoke();
+        }
 
         switch (result)
         {
