@@ -1,6 +1,8 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
+// Attach this to your player prefab, alongside a CharacterController
+// and a PlayerInput component (set PlayerInput's Behavior to "Send Messages").
 [RequireComponent(typeof(CharacterController))]
 public class PlayerMovement : MonoBehaviour
 {
@@ -12,6 +14,9 @@ public class PlayerMovement : MonoBehaviour
     public float gravity = -20f;
     public float groundedStickForce = -2f;
 
+    [Header("Visuals")]
+    public Color[] playerColors = new Color[] { Color.red, Color.blue, Color.green, Color.yellow };
+
     private CharacterController controller;
     private Vector2 moveInput;
     private Vector3 verticalVelocity;
@@ -19,6 +24,25 @@ public class PlayerMovement : MonoBehaviour
     private void Awake()
     {
         controller = GetComponent<CharacterController>();
+    }
+
+    private void Start()
+    {
+        ApplyPlayerColor();
+    }
+
+    private void ApplyPlayerColor()
+    {
+        PlayerInput playerInput = GetComponent<PlayerInput>();
+        if (playerInput == null) return;
+
+        Renderer rend = GetComponentInChildren<Renderer>();
+        if (rend == null || playerColors.Length == 0) return;
+
+        int index = playerInput.playerIndex;
+        Color chosenColor = playerColors[index % playerColors.Length];
+      
+        rend.material.color = chosenColor;
     }
 
     public void OnMove(InputValue value)
@@ -35,7 +59,6 @@ public class PlayerMovement : MonoBehaviour
         }
 
         controller.Move(move * moveSpeed * Time.deltaTime);
-
         if (move.sqrMagnitude > 0.01f)
         {
             Quaternion targetRotation = Quaternion.LookRotation(move, Vector3.up);
