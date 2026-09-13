@@ -40,15 +40,28 @@ public class PlayerRhythmSession : MonoBehaviour
     }
     private void Update()
     {
-        if (!useRandomDebugInput) return;
-        //This is the start point
+
+        if (!useRandomDebugInput || sessionActive) return;
+
+        bool startPressed = false;
+
+        // Keyboard: E
+        Keyboard kb = Keyboard.current;
+        if (kb != null && kb.eKey.wasPressedThisFrame)
+            startPressed = true;
+
+        // Gamepad: B
         Gamepad pad = targetGamepad != null ? targetGamepad : Gamepad.current;
-        if (pad != null && pad.bButton.wasPressedThisFrame && !sessionActive)
+        if (pad != null && pad.bButton.wasPressedThisFrame)
+            startPressed = true;
+
+        if (startPressed)
         {
             RhythmDirection[] pattern = answerMaker.GenerateRandomPattern(debugPatternLength);
             BeginSequence(pattern);
         }
     }
+
 
     public void BeginSequence(RhythmDirection[] pattern)
     {

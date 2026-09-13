@@ -66,25 +66,29 @@ public class RhythmEvaluator : MonoBehaviour
         if (activePrompts.Count == 0) return;
 
         AnswerPrompt current = activePrompts.Peek();
-        double diff = songTimeOfPress - current.TargetSongTime;
 
-      
-        if (diff < -hitWindowSeconds)
-        {
-            Resolve(current, AnswerPrompt.Result.Early);
-             return;
-        }
-           
-
+        
         if (direction != current.RequiredDirection)
         {
             Resolve(current, AnswerPrompt.Result.Wrong);
             return;
         }
 
+        double diff = songTimeOfPress - current.TargetSongTime;
+
+        
+        if (diff < -hitWindowSeconds)
+        {
+            Resolve(current, AnswerPrompt.Result.Early);
+            return;
+        }
+
+        
+        if (diff > hitWindowSeconds)
+            return;
+
         Resolve(current, AnswerPrompt.Result.OnBeat);
     }
-
     private void Resolve(AnswerPrompt prompt, AnswerPrompt.Result result)
     {
         activePrompts.Dequeue();
