@@ -19,14 +19,28 @@ public class RhythmInputManager : MonoBehaviour
 
     private void Update()
     {
+        Keyboard kb = Keyboard.current;
+        double songTime = musicClock.SongTime;
+        if (kb != null)
+        {
+            if (kb.wKey.wasPressedThisFrame) OnDirectionPressed?.Invoke(RhythmDirection.Up, songTime);
+            if (kb.sKey.wasPressedThisFrame) OnDirectionPressed?.Invoke(RhythmDirection.Down, songTime);
+            if (kb.aKey.wasPressedThisFrame) OnDirectionPressed?.Invoke(RhythmDirection.Left, songTime);
+            if (kb.dKey.wasPressedThisFrame) OnDirectionPressed?.Invoke(RhythmDirection.Right, songTime);
+        }
         Gamepad pad = targetGamepad != null ? targetGamepad : Gamepad.current;
         if (pad == null || musicClock == null) return;
 
-        double songTime = musicClock.SongTime;
+      
 
         if (pad.dpad.up.wasPressedThisFrame)    OnDirectionPressed?.Invoke(RhythmDirection.Up, songTime);
         if (pad.dpad.down.wasPressedThisFrame)  OnDirectionPressed?.Invoke(RhythmDirection.Down, songTime);
         if (pad.dpad.left.wasPressedThisFrame)  OnDirectionPressed?.Invoke(RhythmDirection.Left, songTime);
         if (pad.dpad.right.wasPressedThisFrame) OnDirectionPressed?.Invoke(RhythmDirection.Right, songTime);
+
     }
+
+
+
+
 }
