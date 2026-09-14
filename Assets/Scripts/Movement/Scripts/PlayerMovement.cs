@@ -3,8 +3,6 @@ using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Users;
 
 
-// Attach this to your player prefab, alongside a CharacterController
-// and a PlayerInput component (set PlayerInput's Behavior to "Send Messages").
 [RequireComponent(typeof(CharacterController))]
 public class PlayerMovement : MonoBehaviour
 {
@@ -20,8 +18,7 @@ public class PlayerMovement : MonoBehaviour
     public Color[] playerColors = new Color[] { Color.red, Color.blue, Color.green, Color.yellow };
     public int colorIndex = 0;
 
-    [Header("Input")]
-    public int gamepadIndex = 0;
+   
 
     private PlayerInput playerInput;
     private CharacterController controller;
@@ -37,7 +34,7 @@ public class PlayerMovement : MonoBehaviour
     private void Start()
     {
         ApplyPlayerColor();
-        Invoke(nameof(AssignGamepad), 0.1f);
+       
     }
 
     private void ApplyPlayerColor()
@@ -89,45 +86,5 @@ public class PlayerMovement : MonoBehaviour
         controller.Move(verticalVelocity * Time.deltaTime);
     }
 
-    private void AssignGamepad()
-    {
-        if (playerInput == null)
-        {
-            Debug.LogError($"{name}: PlayerInput component is missing!");
-            return;
-        }
-
-        if (Gamepad.all.Count <= gamepadIndex)
-        {
-            Debug.LogWarning(
-                $"{name}: No gamepad found at index {gamepadIndex}. " +
-                $"Connected gamepads: {Gamepad.all.Count}"
-            );
-
-            return;
-        }
-
-        Gamepad pad = Gamepad.all[gamepadIndex];
-
-       
-        if (!playerInput.user.valid)
-        {
-            Debug.LogWarning($"{name}: PlayerInput user is not valid yet.");
-            return;
-        }
-
-       
-        playerInput.user.UnpairDevices();
-
-        
-        InputUser.PerformPairingWithDevice(
-            pad,
-            playerInput.user
-        );
-
-        Debug.Log(
-            $"{name} successfully assigned to Gamepad {gamepadIndex}: " +
-            $"{pad.displayName}"
-        );
-    }
+   
 }

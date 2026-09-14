@@ -42,5 +42,16 @@
             ]
         }
     ],
-    "controlSchemes": []
+    "controlSchemes": [
+        {
+            "name": "GamePad",
+            "bindingGroup": "GamePad",
+            "devices": []
+        },
+        {
+            "name": "Gamepad1",
+            "bindingGroup": "Gamepad1",
+            "devices": []
+        }
+    ]
 }
