@@ -21,7 +21,7 @@ MonoBehaviour:
     x: 0
     y: 36
     width: 1280
-    height: 621.3334
+    height: 621.3333
   m_MinSize: {x: 300, y: 112}
   m_MaxSize: {x: 24288, y: 16192}
   vertical: 0
@@ -184,7 +184,7 @@ MonoBehaviour:
     x: 0
     y: 78.66667
     width: 199.66667
-    height: 595.3334
+    height: 595.3333
   m_SerializedDataModeController:
     m_DataMode: 0
     m_PreferredDataMode: 0
@@ -962,9 +962,9 @@ MonoBehaviour:
     m_gridOpacity: 0.552
     m_NearestPlaneToHandleMode: 0
   m_Rotation:
-    m_Target: {x: -0.030775487, y: 0.96893954, z: -0.1611523, w: -0.18503967}
+    m_Target: {x: -0.15675765, y: 0.7525789, z: -0.60958993, w: -0.1935279}
     speed: 2
-    m_Value: {x: -0.030775476, y: 0.9689392, z: -0.16115224, w: -0.18503961}
+    m_Value: {x: -0.15675765, y: 0.7525789, z: -0.6095899, w: -0.19352789}
   m_Size:
     m_Target: 37.88343
     speed: 2
