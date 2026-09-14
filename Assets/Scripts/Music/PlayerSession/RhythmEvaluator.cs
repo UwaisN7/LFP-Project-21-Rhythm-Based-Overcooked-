@@ -41,7 +41,7 @@ public class RhythmEvaluator : MonoBehaviour
         if (inputManager != null)
             inputManager.OnDirectionPressed -= HandleInput;
     }
-
+    //sdrrge5h
     public void BeginSequence(Queue<AnswerPrompt> prompts)
     {
         activePrompts = prompts;

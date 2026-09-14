@@ -16,10 +16,14 @@ public class RhythmInputManager : MonoBehaviour
     [SerializeField] private MusicClock musicClock;
 
     public event System.Action<RhythmDirection, double> OnDirectionPressed;
-
+    private void Awake()
+    {
+        musicClock = musicClock != null ? musicClock : FindAnyObjectByType<MusicClock>();
+    }
     private void Update()
     {
         Keyboard kb = Keyboard.current;
+        
         double songTime = musicClock.SongTime;
         if (kb != null)
         {

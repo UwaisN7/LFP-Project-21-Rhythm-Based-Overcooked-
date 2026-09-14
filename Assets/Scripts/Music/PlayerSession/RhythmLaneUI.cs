@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class RhythmLaneUI : MonoBehaviour
 {
@@ -34,7 +35,7 @@ public class RhythmLaneUI : MonoBehaviour
     [SerializeField] private Color earlyColor = new Color(1f, 0.8f, 0.3f);
 
     private readonly List<RhythmArrow> activeArrows = new List<RhythmArrow>();
-
+   
     private void OnEnable()
     {
         if (evaluator != null)
