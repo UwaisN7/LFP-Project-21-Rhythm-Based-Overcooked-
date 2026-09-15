@@ -1,17 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-/// <summary>
-/// Judges a queue of AnswerPrompts against player input.
-/// One Evaluator = one player's active rhythm session.
-///
-/// Scoring rules (as spec'd):
-///  - Press before the hit window opens -> ignored, no penalty, prompt stays active.
-///  - Press with the CORRECT direction inside the hit window -> On Beat, +25 points.
-///  - Press with the WRONG direction inside the hit window -> Wrong, -50 points + strike.
-///  - No valid press before the window closes -> Late, strike (no points lost).
-///  - 2 strikes -> ingredient burns (OnIngredientBurned fires).
-/// </summary>
+
 public class RhythmEvaluator : MonoBehaviour
 {
     [Header("Timing")]
@@ -106,7 +96,7 @@ public class RhythmEvaluator : MonoBehaviour
                 break;
 
             case AnswerPrompt.Result.OnBeat:
-                pointManager?.AddActionPoints(playerId, 25);
+                pointManager?.AddActionPoints(playerId, 100);//for now
                 Debug.Log("Added Points");
                 break;
 

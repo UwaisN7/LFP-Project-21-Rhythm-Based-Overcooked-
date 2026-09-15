@@ -38,8 +38,8 @@ public class PointManager : MonoBehaviour
         // Every successful hit grows the combo; anything that costs points resets it.
         if (amount > 0)
             score.ComboMeter++;
-        else
-            score.ComboMeter = 0;
+        //else
+        //    score.ComboMeter = 0;
 
         OnScoreChanged?.Invoke(playerId, score);
     }
