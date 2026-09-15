@@ -7,6 +7,9 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] private PlayerInput player1;
     [SerializeField] private PlayerInput player2;
 
+    [SerializeField] private PlayerRhythmSession session1;
+    [SerializeField] private PlayerRhythmSession session2;
+
     private void Start()
     {
         AssignPlayers();
@@ -22,6 +25,8 @@ public class PlayerManager : MonoBehaviour
 
         AssignGamepad(player1, Gamepad.all[0]);
         AssignGamepad(player2, Gamepad.all[1]);
+        session1?.SetGamepad(Gamepad.all[0]);
+        session2?.SetGamepad(Gamepad.all[1]);
     }
 
     private void AssignGamepad(PlayerInput player, Gamepad gamepad)
@@ -44,4 +49,6 @@ public class PlayerManager : MonoBehaviour
             $"{player.name} assigned to {gamepad.displayName}"
         );
     }
+
+    
 }

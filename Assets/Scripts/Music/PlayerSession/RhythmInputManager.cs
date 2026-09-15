@@ -45,6 +45,10 @@ public class RhythmInputManager : MonoBehaviour
     }
 
 
+    public void SetGamepad(Gamepad pad)
+    {
+        targetGamepad = pad;
+    }
 
 
 }

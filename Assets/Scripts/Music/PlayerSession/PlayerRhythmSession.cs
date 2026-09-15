@@ -45,15 +45,18 @@ public class PlayerRhythmSession : MonoBehaviour
 
         bool startPressed = false;
 
-        // Keyboard: E
-        Keyboard kb = Keyboard.current;
-        if (kb != null && kb.eKey.wasPressedThisFrame)
-            startPressed = true;
-
-        // Gamepad: B
+        
         Gamepad pad = targetGamepad != null ? targetGamepad : Gamepad.current;
         if (pad != null && pad.bButton.wasPressedThisFrame)
             startPressed = true;
+
+        
+        if (targetGamepad == null)
+        {
+            Keyboard kb = Keyboard.current;
+            if (kb != null && kb.eKey.wasPressedThisFrame)
+                startPressed = true;
+        }
 
         if (startPressed)
         {
@@ -67,7 +70,7 @@ public class PlayerRhythmSession : MonoBehaviour
     {
         Queue<AnswerPrompt> sequence = answerMaker.GenerateSequence(pattern, musicClock);
         sessionActive = true;
-        // Snapshot for the UI before the evaluator starts consuming the queue.
+     
         List<AnswerPrompt> promptList = sequence.ToList();
 
         evaluator.BeginSequence(sequence);
@@ -82,4 +85,9 @@ public class PlayerRhythmSession : MonoBehaviour
     {
         sessionActive = false;
     }
+    public void SetGamepad(Gamepad pad)
+    {
+        targetGamepad = pad;
+    }
+
 }
