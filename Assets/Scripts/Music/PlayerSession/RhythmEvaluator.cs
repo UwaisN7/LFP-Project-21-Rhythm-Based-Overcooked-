@@ -49,40 +49,41 @@ public class RhythmEvaluator : MonoBehaviour
         {
             Resolve(current, AnswerPrompt.Result.Late);
         }
+       
     }
 
     private void HandleInput(RhythmDirection direction, double songTimeOfPress)
-    {
+    { 
         if (activePrompts.Count == 0) return;
 
         AnswerPrompt current = activePrompts.Peek();
 
-        
-        if (direction != current.RequiredDirection)
-        {
-            Resolve(current, AnswerPrompt.Result.Wrong);
-            return;
-        }
-
         double diff = songTimeOfPress - current.TargetSongTime;
-
-        
-        if (diff < -hitWindowSeconds)
+Debug.Log($"[Eval] P{playerId} dir={direction} | press={songTimeOfPress:F4} " +
+          $"target={current.TargetSongTime:F4} diff={diff * 1000:F1}ms " +
+          $"window=±{hitWindowSeconds * 1000:F1}ms");
+        //if (direction != current.RequiredDirection)
+        //{
+        //    Resolve(current, AnswerPrompt.Result.Wrong);
+        //    return; //Comment this bitch out if its all returning wrong because yeah screw u u stupif pice of shit 
+        //}
+         if (diff < -hitWindowSeconds)
         {
             Resolve(current, AnswerPrompt.Result.Early);
-            return;
         }
-
-        
-        if (diff > hitWindowSeconds)
-            return;
-
-        Resolve(current, AnswerPrompt.Result.OnBeat);
+        else if (diff > hitWindowSeconds)
+        {
+            Resolve(current, AnswerPrompt.Result.Late);
+        }
+        else
+        {
+            Resolve(current, AnswerPrompt.Result.OnBeat);
+        }
     }
     private void Resolve(AnswerPrompt prompt, AnswerPrompt.Result result)
     {
         activePrompts.Dequeue();
-
+        prompt.CurrentResult = result;
         if (activePrompts.Count == 0)
         {
             OnSequenceComplete?.Invoke();
@@ -96,8 +97,8 @@ public class RhythmEvaluator : MonoBehaviour
                 break;
 
             case AnswerPrompt.Result.OnBeat:
-                pointManager?.AddActionPoints(playerId, 100);//for now
-                Debug.Log("Added Points");
+                pointManager?.AddActionPoints(playerId, 50);
+                Debug.Log("Added Points player hit on beat");
                 break;
 
             case AnswerPrompt.Result.Wrong:
@@ -107,7 +108,7 @@ public class RhythmEvaluator : MonoBehaviour
                 break;
 
             case AnswerPrompt.Result.Late:
-                Debug.Log("Losing Points");
+                Debug.Log("Player hit late so they might burn");
                 RegisterStrike();
                 break;
         }

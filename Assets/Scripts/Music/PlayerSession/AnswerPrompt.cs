@@ -1,10 +1,6 @@
 using System;
 
-/// <summary>
-/// One required input, locked to a specific beat in the song.
-/// AnswerMaker creates a queue of these; RhythmEvaluator judges them
-/// against player input.
-/// </summary>
+
 [Serializable]
 public class AnswerPrompt
 {

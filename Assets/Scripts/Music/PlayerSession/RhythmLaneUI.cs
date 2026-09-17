@@ -1,4 +1,6 @@
+using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -24,7 +26,7 @@ public class RhythmLaneUI : MonoBehaviour
 
     [Header("Feedback")]
     [Tooltip("Prefab with RhythmFeedbackText + TextMeshPro. Spawned at hitLine on resolve.")]
-    [SerializeField] private GameObject feedbackTextPrefab;
+    [SerializeField] private TextMeshPro feedbackTextPrefab;
     [SerializeField] private string onBeatMessage = "PERFECT!";
     [SerializeField] private string wrongMessage = "WRONG!";
     [SerializeField] private string lateMessage = "MISS!";
@@ -33,7 +35,9 @@ public class RhythmLaneUI : MonoBehaviour
     [SerializeField] private Color wrongColor = new Color(1f, 0.3f, 0.3f);
     [SerializeField] private Color lateColor = new Color(0.7f, 0.7f, 0.7f);
     [SerializeField] private Color earlyColor = new Color(1f, 0.8f, 0.3f);
-
+    [Header("Feedback Animation")]
+    [SerializeField] private float feedbackRiseSpeed = 1f;
+    [SerializeField] private float feedbackLifetime = 0.9f;
     private readonly List<RhythmArrow> activeArrows = new List<RhythmArrow>();
    
     private void OnEnable()
@@ -107,7 +111,7 @@ public class RhythmLaneUI : MonoBehaviour
 
     private void HandlePromptResolved(AnswerPrompt prompt)
     {
-        Debug.Log($"[LaneUI] Prompt resolved: {prompt.CurrentResult}");
+        //Debug.Log($"[LaneUI] Prompt resolved: {prompt.CurrentResult}");
         RhythmArrow match = activeArrows.Find(a => a != null && a.Prompt == prompt);
         if (match != null)
         {
@@ -121,32 +125,75 @@ public class RhythmLaneUI : MonoBehaviour
 
     private void SpawnFeedback(AnswerPrompt.Result result)
     {
-        Debug.Log($"[LaneUI] SpawnFeedback called. Prefab null? {feedbackTextPrefab == null}, hitLine null? {hitLine == null}");
-        
-        if (feedbackTextPrefab == null || hitLine == null) ;
+        if (feedbackTextPrefab == null || hitLine == null)
+        {
+            Debug.LogWarning($"{nameof(RhythmLaneUI)}: feedback text or hitLine missing.", this);
+            return;
+        }
 
         string message;
         Color color;
 
         switch (result)
         {
-            case AnswerPrompt.Result.OnBeat: message = onBeatMessage; color = onBeatColor; break;
-            case AnswerPrompt.Result.Wrong: message = wrongMessage; color = wrongColor; break;
-            case AnswerPrompt.Result.Late: message = lateMessage; color = lateColor; break;
-            case AnswerPrompt.Result.Early: message = earlyMessage; color = earlyColor; break;
-            default: return;
+            case AnswerPrompt.Result.OnBeat:
+                message = onBeatMessage;
+                color = onBeatColor;
+                break;
+
+            case AnswerPrompt.Result.Wrong:
+                message = wrongMessage;
+                color = wrongColor;
+                break;
+
+            case AnswerPrompt.Result.Late:
+                message = lateMessage;
+                color = lateColor;
+                break;
+
+            case AnswerPrompt.Result.Early:
+                message = earlyMessage;
+                color = earlyColor;
+                break;
+
+            default:
+                return;
         }
 
-        GameObject instance = Instantiate(feedbackTextPrefab, hitLine.position, Quaternion.identity, laneParent);
-        Debug.Log($"[LaneUI] Instantiated feedback at {hitLine.position}, instance null? {instance == null}");
-        if (instance.TryGetComponent(out RhythmFeedbackText feedback))
+        // Spawn the 3D TextMesh directly.
+        TextMeshPro popup = Instantiate(feedbackTextPrefab);
+
+        popup.text = message;
+        popup.color = color;
+
+        // Spawn it at the hit line.
+        popup.transform.position = laneParent.position;
+
+        StartCoroutine(RiseAndFade(popup));
+    }
+    private IEnumerator RiseAndFade(TextMeshPro popup)
+    {
+        float elapsed = 0f;
+        Color startColor = popup.color;
+
+        while (elapsed < feedbackLifetime)
         {
-            feedback.Setup(message, color, hitLine.position);
+            elapsed += Time.deltaTime;
+
+            popup.transform.position += Vector3.up * feedbackRiseSpeed * Time.deltaTime;
+
+            float alpha = Mathf.Lerp(1f, 0f, elapsed / feedbackLifetime);
+
+            popup.color = new Color(
+                startColor.r,
+                startColor.g,
+                startColor.b,
+                alpha
+            );
+
+            yield return null;
         }
-        else
-        {
-            Debug.LogError($"{nameof(RhythmLaneUI)}: feedback prefab has no RhythmFeedbackText component.", feedbackTextPrefab);
-            Destroy(instance);
-        }
+
+        Destroy(popup.gameObject);
     }
 }
