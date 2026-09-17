@@ -29,6 +29,9 @@ public class PointManager : MonoBehaviour
     [Tooltip("Combo meter (hit streak) lost per strike, instead of wiping it to 0. Tune this in the Inspector.")]
     [SerializeField] private int strikeComboMeterPenalty = 3;
 
+    public float player1FinalScore;
+    public float player2FinalScore;
+
     private Dictionary<int, PlayerScore> scores = new Dictionary<int, PlayerScore>();
 
     public event System.Action<int, PlayerScore> OnScoreChanged;
@@ -145,4 +148,12 @@ public class PointManager : MonoBehaviour
         }
         return sb.ToString().TrimEnd();
     }
+
+
+    //void CalcultateFinalScores(orderDifficulty, timeLeft)
+    //{
+    //    //Order Manager gives the order difficulty and the time left on the dish (Order Difficulty +Timer) * Combo Multiplier = Final Score
+
+    //  //Also wtf is this thing not listening to me i just want every 100 combo multiplier to equate to 1x
+    //}
 }
