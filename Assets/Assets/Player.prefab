@@ -71,6 +71,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 6026536476458025520}
   - {fileID: 2676259396080929473}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -200,6 +201,7 @@ MonoBehaviour:
   - {r: 0, g: 0, b: 1, a: 1}
   - {r: 0, g: 1, b: 0, a: 1}
   - {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  colorIndex: 0
 --- !u!114 &1018879264233043397
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -273,11 +275,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a53f6d6b44fd24f4bb72b013b8e502e5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::RhythmEvaluator
-  hitWindowSeconds: 0.12
+  hitWindowSeconds: 0.15
   musicClock: {fileID: 0}
   inputManager: {fileID: 6683360337391858824}
   pointManager: {fileID: 0}
-  playerId: 1
+  playerId: 0
 --- !u!114 &6683360337391858824
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -305,23 +307,56 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::RhythmLaneUI
   musicClock: {fileID: 0}
   evaluator: {fileID: 4043033174949312782}
-  laneParent: {fileID: 0}
+  laneParent: {fileID: 6026536476458025520}
   spawnPoint: {fileID: 8691979048214709756}
   hitLine: {fileID: 6744161452848573297}
-  travelTimeSeconds: 1.5
+  travelTimeSeconds: 2
   upPrefab: {fileID: 7548853253782899086, guid: 05acf8ab445bc87498cfe410afe57322, type: 3}
   downPrefab: {fileID: 2732661942798731376, guid: 2886542ad7976e24b8bc326e93742f02, type: 3}
   leftPrefab: {fileID: 7450543308035359788, guid: 6e8b3e8dc7f253346875aed195b00c90, type: 3}
   rightPrefab: {fileID: 486151292097305172, guid: 51eac4dd55740f04f8fb17a9762e63b9, type: 3}
-  feedbackTextPrefab: {fileID: 8110753937130158703, guid: e78cefabfc520c248807414fe720a9c6, type: 3}
+  feedbackTextPrefab: {fileID: 2045950631572333406, guid: 6af8015f2a5bd8a41be60c63be4e8d4a, type: 3}
   onBeatMessage: PERFECT!
   wrongMessage: WRONG!
-  lateMessage: MISS!
+  lateMessage: WRONG!
   earlyMessage: TOO EARLY!
   onBeatColor: {r: 0.3, g: 1, b: 0.4, a: 1}
   wrongColor: {r: 1, g: 0.3, b: 0.3, a: 1}
-  lateColor: {r: 0.7, g: 0.7, b: 0.7, a: 1}
+  lateColor: {r: 1, g: 0, b: 0, a: 1}
   earlyColor: {r: 1, g: 0.8, b: 0.3, a: 1}
+  feedbackRiseSpeed: 1
+  feedbackLifetime: 0.9
+--- !u!1 &7201829515068260282
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6026536476458025520}
+  m_Layer: 0
+  m_Name: Feedback spawn
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6026536476458025520
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7201829515068260282}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 1, z: 2}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1431492006279955262}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8260067364698549367
 GameObject:
   m_ObjectHideFlags: 0
