@@ -200,6 +200,7 @@ MonoBehaviour:
   - {r: 0, g: 0, b: 1, a: 1}
   - {r: 0, g: 1, b: 0, a: 1}
   - {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  colorIndex: 0
 --- !u!114 &1018879264233043397
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -313,7 +314,7 @@ MonoBehaviour:
   downPrefab: {fileID: 2732661942798731376, guid: 2886542ad7976e24b8bc326e93742f02, type: 3}
   leftPrefab: {fileID: 7450543308035359788, guid: 6e8b3e8dc7f253346875aed195b00c90, type: 3}
   rightPrefab: {fileID: 486151292097305172, guid: 51eac4dd55740f04f8fb17a9762e63b9, type: 3}
-  feedbackTextPrefab: {fileID: 8110753937130158703, guid: e78cefabfc520c248807414fe720a9c6, type: 3}
+  feedbackTextPrefab: {fileID: 2908403586423482729, guid: e78cefabfc520c248807414fe720a9c6, type: 3}
   onBeatMessage: PERFECT!
   wrongMessage: WRONG!
   lateMessage: MISS!
@@ -322,6 +323,8 @@ MonoBehaviour:
   wrongColor: {r: 1, g: 0.3, b: 0.3, a: 1}
   lateColor: {r: 0.7, g: 0.7, b: 0.7, a: 1}
   earlyColor: {r: 1, g: 0.8, b: 0.3, a: 1}
+  feedbackRiseSpeed: 1
+  feedbackLifetime: 0.9
 --- !u!1 &8260067364698549367
 GameObject:
   m_ObjectHideFlags: 0
