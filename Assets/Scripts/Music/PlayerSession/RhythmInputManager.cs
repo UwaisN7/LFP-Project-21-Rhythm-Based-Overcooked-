@@ -1,12 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-/// <summary>
-/// Reads D-Pad input for one player using the new Input System
-/// and raises an event with which direction was pressed and *when*,
-/// stamped in SongTime so it's directly comparable to AnswerPrompt targets.
-/// Starting with D-Pad only, as agreed - buttons can be added the same way later.
-/// </summary>
 public class RhythmInputManager : MonoBehaviour
 {
    

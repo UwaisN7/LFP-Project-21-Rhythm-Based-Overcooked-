@@ -27,11 +27,9 @@ public class ComboManager : MonoBehaviour
         label.text = "0X";
     }
 
-    private void HandleScoreChanged(int changedPlayerId, PointManager.PlayerScore score)
+    private void HandleScoreChanged(int changedPlayerId, PointManager.PlayerScore score, int multiplier)
     {
         if (changedPlayerId != playerId) return;
-
-        
-            label.text = "x" + score.ComboMeter;
+        label.text = "x" + multiplier;
     }
 }

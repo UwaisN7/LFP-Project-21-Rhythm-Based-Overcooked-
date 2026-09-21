@@ -1,11 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
- 
-/// <summary>
-/// Builds the queue of AnswerPrompts for an ingredient.
-/// The ingredient hands this a fixed pattern (e.g. Up, Up, Left, Right)
-/// and this schedules one prompt per upcoming beat, starting a couple
-/// of beats in the future so the player has reaction time.
+
 
 public class AnswerMaker : MonoBehaviour
 {
@@ -38,11 +33,7 @@ public class AnswerMaker : MonoBehaviour
         return prompts;
     }
  
-    /// <summary>
-    /// Placeholder pattern generator for testing before ingredient data exists.
-    /// Once ingredients feed real patterns into GenerateSequence, this just
-    /// sits unused as a debug helper - nothing to delete.
-    /// </summary>
+    //RandomPattewrnshit 
     public RhythmDirection[] GenerateRandomPattern(int length)
     {
         var pattern = new RhythmDirection[length];
