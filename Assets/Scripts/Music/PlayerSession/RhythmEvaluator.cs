@@ -92,7 +92,7 @@ Debug.Log($"[Eval] P{playerId} dir={direction} | press={songTimeOfPress:F4} " +
         switch (result)
         {
             case AnswerPrompt.Result.Early:
-                pointManager?.AddActionPoints(playerId, 0);
+                pointManager?.AddActionPoints(playerId, -25);
                 Debug.Log("`Plyaer hit early no penalty but no points");
                 break;
 

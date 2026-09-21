@@ -3,15 +3,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-/// <summary>
-/// One player's rhythm session. Ingredients call BeginSequence() with
-/// their fixed input pattern when the player picks them up / starts
-/// handling them - that path works regardless of the debug toggle below.
-///
-/// Until ingredient data exists, hold B to fire a random test pattern.
-/// Flip useRandomDebugInput off once ingredients are feeding real
-/// patterns - no code needs to be deleted, it just goes unused.
-/// </summary>
+
 public class PlayerRhythmSession : MonoBehaviour
 {
     [SerializeField] private MusicClock musicClock;
@@ -89,5 +81,11 @@ public class PlayerRhythmSession : MonoBehaviour
     {
         targetGamepad = pad;
     }
+    //void CalcultateFinalScores(orderDifficulty, timeLeft)
+    //{
+    //    //Order Manager gives the order difficulty and the time left on the dish (Order Difficulty +Timer) * Combo Multiplier = Final Score
+   //also tells me the player id and then it just adds that value to final score easy peasy
 
+    //  
+    //}
 }

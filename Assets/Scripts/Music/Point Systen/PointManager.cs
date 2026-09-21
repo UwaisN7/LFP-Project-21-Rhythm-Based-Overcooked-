@@ -1,40 +1,39 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
+
 public class PointManager : MonoBehaviour
 {
     [System.Serializable]
     public class PlayerScore
     {
         public int ActionPoints;
-        public int ComboMeter;
 
-        public int ComboMultiplier = 1;
+        public int ComboMeter => ActionPoints;
+
     }
 
     [Header("Debug")]
-    [Tooltip("Log every score change with full AP breakdown for all players.")]
     [SerializeField] private bool debugLogging = true;
 
-    [Tooltip("Action points required per combo multiplier tier. Default: 100.")]
     [SerializeField] private int pointsPerMultiplierTier = 100;
 
-    [Tooltip("If true, AP is clamped at 0 and can never go negative. " +
-             "If false, AP can go negative (multiplier already floors at 1x).")]
     [SerializeField] private bool clampActionPointsAtZero = true;
 
     [Header("Strike Penalties")]
-    [Tooltip("Action points lost when a player does a bad action (a strike). Tune this in the Inspector.")]
     [SerializeField] private int strikeActionPointPenalty = 50;
 
-    [Tooltip("Combo meter (hit streak) lost per strike, instead of wiping it to 0. Tune this in the Inspector.")]
-    [SerializeField] private int strikeComboMeterPenalty = 3;
+    [Header("Test (Q Key)")]
+    [SerializeField] private int testOrderDifficulty = 100;
+    [SerializeField] private int testTimeLeft = 50;
+    [SerializeField] private int testPlayerId = 0;
 
     public float player1FinalScore;
     public float player2FinalScore;
 
     private Dictionary<int, PlayerScore> scores = new Dictionary<int, PlayerScore>();
 
-    public event System.Action<int, PlayerScore> OnScoreChanged;
+    public event System.Action<int, PlayerScore, int> OnScoreChanged;
 
     private PlayerScore GetOrCreate(int playerId)
     {
@@ -46,25 +45,24 @@ public class PointManager : MonoBehaviour
         return score;
     }
 
+    public int GetComboMultiplier(int playerId)
+    {
+        var score = GetOrCreate(playerId);
+        return Mathf.Max(1, (score.ActionPoints / pointsPerMultiplierTier) + 1);
+    }
+
     public void AddActionPoints(int playerId, int amount)
     {
         var score = GetOrCreate(playerId);
         int previousAP = score.ActionPoints;
-        int previousMultiplier = score.ComboMultiplier;
+        int previousMultiplier = GetComboMultiplier(playerId);
 
         score.ActionPoints += amount;
 
         if (clampActionPointsAtZero && score.ActionPoints < 0)
             score.ActionPoints = 0;
 
-        
-        if (amount > 0)
-            score.ComboMeter++;
-
-        
-        int newMultiplier = score.ActionPoints / pointsPerMultiplierTier;
-        if (newMultiplier < 1) newMultiplier = 1; 
-        score.ComboMultiplier = newMultiplier;
+        int newMultiplier = GetComboMultiplier(playerId);
 
         if (debugLogging)
         {
@@ -77,37 +75,26 @@ public class PointManager : MonoBehaviour
             Debug.Log(
                 $"[PointManager] Player {playerId} | " +
                 $"AP: {previousAP} -> {score.ActionPoints} ({amount:+#;-#;0}) | " +
-                $"Multiplier: {newMultiplier}x{tierChange} | " +
-                $"ComboMeter: {score.ComboMeter}\n" +
-                FormatAllPlayerScores()
+                $"Multiplier: {newMultiplier}x{tierChange}\n" 
+
             );
         }
 
-        OnScoreChanged?.Invoke(playerId, score);
+        OnScoreChanged?.Invoke(playerId, score, newMultiplier);
     }
 
     public void ReportStrike(int playerId)
     {
         var score = GetOrCreate(playerId);
         int previousAP = score.ActionPoints;
-        int previousMultiplier = score.ComboMultiplier;
-        int previousComboMeter = score.ComboMeter;
+        int previousMultiplier = GetComboMultiplier(playerId);
 
-      
         score.ActionPoints -= strikeActionPointPenalty;
 
         if (clampActionPointsAtZero && score.ActionPoints < 0)
             score.ActionPoints = 0;
 
-        // Softer penalty: drop the streak by a fixed amount instead of wiping it out.
-        score.ComboMeter -= strikeComboMeterPenalty;
-        if (score.ComboMeter < 0)
-            score.ComboMeter = 0;
-
-        int newMultiplier = score.ActionPoints / pointsPerMultiplierTier;
-        if (newMultiplier < 1) newMultiplier = 1; 
-
-        score.ComboMultiplier = newMultiplier;
+        int newMultiplier = GetComboMultiplier(playerId);
 
         if (debugLogging)
         {
@@ -120,40 +107,31 @@ public class PointManager : MonoBehaviour
             Debug.Log(
                 $"[PointManager] Player {playerId} STRUCK | " +
                 $"AP: {previousAP} -> {score.ActionPoints} (-{strikeActionPointPenalty}) | " +
-                $"ComboMeter: {previousComboMeter} -> {score.ComboMeter} (-{strikeComboMeterPenalty}) | " +
-                $"Multiplier: {newMultiplier}x{tierChange}\n" +
-                FormatAllPlayerScores()
+                $"Multiplier: {newMultiplier}x{tierChange}\n" 
+                
             );
         }
 
-        OnScoreChanged?.Invoke(playerId, score);
+        OnScoreChanged?.Invoke(playerId, score, newMultiplier);
     }
 
     public PlayerScore GetScore(int playerId) => GetOrCreate(playerId);
 
-    public int GetComboMultiplier(int playerId) => GetOrCreate(playerId).ComboMultiplier;
-
-    private string FormatAllPlayerScores()
+    public float CalculateFinalScore(int playerId, int orderDifficulty, int timeLeft)
     {
-        if (scores.Count == 0) return "  (no players tracked yet)";
-
-        var sb = new System.Text.StringBuilder();
-        foreach (var kvp in scores)
-        {
-            string playerLabel = kvp.Key == 0 ? "Red" : kvp.Key == 1 ? "Blue" : $"P{kvp.Key}";
-            sb.AppendLine($"  Player {kvp.Key} ({playerLabel}): " +
-                          $"AP={kvp.Value.ActionPoints} | " +
-                          $"Multiplier={kvp.Value.ComboMultiplier}x | " +
-                          $"Combo={kvp.Value.ComboMeter}");
-        }
-        return sb.ToString().TrimEnd();
+        int multiplier = GetComboMultiplier(playerId);
+        float finalScore = (orderDifficulty + timeLeft) * multiplier;
+        return finalScore;
     }
 
+    public void ApplyFinalScore(int playerId, int orderDifficulty, int timeLeft)
+    {
+        float final = CalculateFinalScore(playerId, orderDifficulty, timeLeft);
+        if (playerId == 0) player1FinalScore = final;
+        else if (playerId == 1) player2FinalScore = final;
 
-    //void CalcultateFinalScores(orderDifficulty, timeLeft)
-    //{
-    //    //Order Manager gives the order difficulty and the time left on the dish (Order Difficulty +Timer) * Combo Multiplier = Final Score
+        Debug.Log($"[PointManager] Player {playerId} FINAL SCORE: {final} " +
+                  $"(Diff {orderDifficulty} + Time {timeLeft}) * {GetComboMultiplier(playerId)}x = {final}");
+    }
 
-    //  //Also wtf is this thing not listening to me i just want every 100 combo multiplier to equate to 1x
-    //}
 }
