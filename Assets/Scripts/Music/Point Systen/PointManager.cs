@@ -133,5 +133,15 @@ public class PointManager : MonoBehaviour
         Debug.Log($"[PointManager] Player {playerId} FINAL SCORE: {final} " +
                   $"(Diff {orderDifficulty} + Time {timeLeft}) * {GetComboMultiplier(playerId)}x = {final}");
     }
+    public void AddFinalScore(int playerId, float amount)
+    {
+        if (playerId == 0) player1FinalScore += amount;
+        else if (playerId == 1) player2FinalScore += amount;
 
+        if (debugLogging)
+        {
+            float currentTotal = playerId == 0 ? player1FinalScore : player2FinalScore;
+            Debug.Log($"[PointManager] Player {playerId} final score +{amount} | Total: {currentTotal}");
+        }
+    }
 }
