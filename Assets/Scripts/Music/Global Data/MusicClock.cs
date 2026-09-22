@@ -33,6 +33,14 @@ public class MusicClock : MonoBehaviour
         CurrentBar = 0;
     }
 
+    public double BeatToSongTime(int beatIndex)
+    {
+        if (currentTrack == null)
+            return 0;
+
+        return currentTrack.beatOffset + (beatIndex * secondsPerBeat);
+    }
+
     private void Update()
     {
         if (currentTrack == null)
