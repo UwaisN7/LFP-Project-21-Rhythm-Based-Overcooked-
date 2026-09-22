@@ -13,7 +13,6 @@ GameObject:
   - component: {fileID: 8430601247856931957}
   - component: {fileID: 5225572255192815874}
   - component: {fileID: 3065184049177622559}
-  - component: {fileID: 8769918440967551974}
   m_Layer: 0
   m_Name: PouredSauce (1)
   m_TagString: Untagged
@@ -1445,28 +1444,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 427695872227221443}
   m_Mesh: {fileID: 0}
---- !u!64 &8769918440967551974
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 427695872227221443}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 0}
 --- !u!1 &759011021563076765
 GameObject:
   m_ObjectHideFlags: 0
@@ -1480,7 +1457,6 @@ GameObject:
   - component: {fileID: 6412770839669100250}
   - component: {fileID: 396768171715630204}
   - component: {fileID: 6985635676874663800}
-  - component: {fileID: 8301355960207987757}
   m_Layer: 0
   m_Name: PouredSauce
   m_TagString: Untagged
@@ -2912,28 +2888,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 759011021563076765}
   m_Mesh: {fileID: 0}
---- !u!64 &8301355960207987757
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 759011021563076765}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 0}
 --- !u!1 &3858311665680850755
 GameObject:
   m_ObjectHideFlags: 0
@@ -2947,7 +2901,6 @@ GameObject:
   - component: {fileID: 3200348893746888030}
   - component: {fileID: 7703007262690591986}
   - component: {fileID: 7567528416009363596}
-  - component: {fileID: 3022820208463658478}
   m_Layer: 0
   m_Name: CutDough (1)
   m_TagString: Untagged
@@ -4379,28 +4332,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3858311665680850755}
   m_Mesh: {fileID: 0}
---- !u!64 &3022820208463658478
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3858311665680850755}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 0}
 --- !u!1 &4846504040934113741
 GameObject:
   m_ObjectHideFlags: 0
@@ -4512,7 +4443,6 @@ GameObject:
   - component: {fileID: 4406991221861337060}
   - component: {fileID: 8724368660596741446}
   - component: {fileID: 4864385637576923909}
-  - component: {fileID: 1892374828999026570}
   m_Layer: 0
   m_Name: Plate (5)
   m_TagString: Untagged
@@ -5943,26 +5873,4 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7487409130668493845}
-  m_Mesh: {fileID: 0}
---- !u!64 &1892374828999026570
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7487409130668493845}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
   m_Mesh: {fileID: 0}

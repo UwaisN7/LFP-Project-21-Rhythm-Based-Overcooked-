@@ -1,9 +1,12 @@
+using TMPro;
 using UnityEngine;
 
 public class Oven : MonoBehaviour, IInteractable
 {
     [Header("Cooking")]
     [SerializeField] private float cookingTime = 15f;
+    [SerializeField] private TMP_Text timerText;
+    [SerializeField] private GameObject timerUI;
 
     [Header("Final Dish")]
     [SerializeField] private GameObject finalDishPrefab;
@@ -22,11 +25,11 @@ public class Oven : MonoBehaviour, IInteractable
 
         if (!isCooking)
         {
-            // Player must be holding something
+            // Player needs to be holding something
             if (!player.IsHolding)
                 return;
 
-            // Check if player is holding a plate
+            // Check if the player is holding a plate
             Plate plate = player.HeldObject.GetComponent<Plate>();
 
             if (plate == null)
@@ -35,7 +38,7 @@ public class Oven : MonoBehaviour, IInteractable
                 return;
             }
 
-            // Check that all ingredients are present
+            // Check that all ingredients are on the plate
             if (!plate.HasAllIngredients())
             {
                 Debug.Log("The pizza is missing ingredients!");
@@ -45,14 +48,25 @@ public class Oven : MonoBehaviour, IInteractable
             // Take the plate from the player's hands
             plateCooking = player.RemoveHeldObject();
 
-            // Put it at the oven
+            // Put the plate inside the oven
             plateCooking.transform.SetParent(transform);
             plateCooking.transform.localPosition = Vector3.zero;
             plateCooking.transform.localRotation = Quaternion.identity;
 
-            // Start timer
+            // Start cooking timer
             cookingTimer = cookingTime;
             isCooking = true;
+
+            // Show timer
+            if (timerUI != null)
+            {
+                timerUI.SetActive(true);
+            }
+
+            if (timerText != null)
+            {
+                timerText.text = Mathf.Ceil(cookingTimer).ToString();
+            }
 
             Debug.Log("Pizza is cooking!");
 
@@ -76,8 +90,16 @@ public class Oven : MonoBehaviour, IInteractable
         if (!isCooking)
             return;
 
+        // Count down
         cookingTimer -= Time.deltaTime;
 
+        // Update visual timer
+        if (timerText != null)
+        {
+            timerText.text = Mathf.Ceil(cookingTimer).ToString();
+        }
+
+        // Finish cooking
         if (cookingTimer <= 0f)
         {
             FinishCooking();
@@ -91,18 +113,19 @@ public class Oven : MonoBehaviour, IInteractable
         // RHYTHM SYSTEM GOES HERE
         // =========================================
 
-        Debug.Log("Rhythm interaction!");
-
-        // Later:
-        // RhythmManager.StartRhythm();
-        // or
-        // cookingTimer -= rhythmBonus;
+        
     }
 
 
     private void FinishCooking()
     {
         isCooking = false;
+
+        // Hide timer
+        if (timerUI != null)
+        {
+            timerUI.SetActive(false);
+        }
 
         Debug.Log("Pizza finished cooking!");
 

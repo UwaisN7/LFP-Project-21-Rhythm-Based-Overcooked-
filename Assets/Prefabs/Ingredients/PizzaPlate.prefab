@@ -340,7 +340,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0.7071068, y: -0, z: -0, w: 0.7071068}
   m_LocalPosition: {x: 0.2599992, y: 3.63, z: 0.102221176}
-  m_LocalScale: {x: 0.82596457, y: -0.6508683, z: 1.3771497}
+  m_LocalScale: {x: 0.82596457, y: 0.65, z: 1.3771497}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3898557560789156860}
@@ -1024,7 +1024,6 @@ GameObject:
   - component: {fileID: 5290566781128627228}
   - component: {fileID: 7464638385688558619}
   - component: {fileID: 7798481276611423048}
-  - component: {fileID: 9075018747788151865}
   m_Layer: 0
   m_Name: CutDough (2)
   m_TagString: Untagged
@@ -2456,28 +2455,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3454265289081147872}
   m_Mesh: {fileID: 0}
---- !u!64 &9075018747788151865
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3454265289081147872}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 0}
 --- !u!1 &4658860452901393509
 GameObject:
   m_ObjectHideFlags: 0
@@ -2491,7 +2468,6 @@ GameObject:
   - component: {fileID: 132664398242318358}
   - component: {fileID: 2017147029551112369}
   - component: {fileID: 558557941954780715}
-  - component: {fileID: 5612382493807047745}
   m_Layer: 0
   m_Name: PouredSauce (2)
   m_TagString: Untagged
@@ -3922,28 +3898,6 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4658860452901393509}
-  m_Mesh: {fileID: 0}
---- !u!64 &5612382493807047745
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4658860452901393509}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
   m_Mesh: {fileID: 0}
 --- !u!1 &5089308361877566140
 GameObject:
