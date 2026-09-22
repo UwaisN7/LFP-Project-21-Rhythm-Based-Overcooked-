@@ -9,7 +9,7 @@ public class PlayerInteraction : MonoBehaviour
     private GameObject heldObject;
 
     public bool IsHolding => heldObject != null;
-
+    public int PlayerId { get; set; }
     public GameObject HeldObject
     {
         get { return heldObject; }

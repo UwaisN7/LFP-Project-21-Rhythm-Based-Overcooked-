@@ -13,7 +13,7 @@ public class RhythmEvaluator : MonoBehaviour
     [SerializeField] private RhythmInputManager inputManager;
     [SerializeField] private PointManager pointManager;
     [SerializeField] private int playerId = 0;
-
+    public int PlayerId => playerId;
     public event System.Action<AnswerPrompt> OnPromptResolved;
     public event System.Action OnIngredientBurned;
     public event System.Action OnSequenceComplete;
@@ -44,7 +44,6 @@ public class RhythmEvaluator : MonoBehaviour
 
         AnswerPrompt current = activePrompts.Peek();
 
-        // Window closed with nothing hit -> Late strike.
         if (musicClock.SongTime > current.TargetSongTime + hitWindowSeconds)
         {
             Resolve(current, AnswerPrompt.Result.Late);
