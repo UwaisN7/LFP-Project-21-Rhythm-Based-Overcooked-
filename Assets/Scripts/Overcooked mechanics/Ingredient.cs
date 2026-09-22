@@ -10,7 +10,9 @@ public enum IngredientType
 public enum IngredientState
 {
     Raw,
-    Chopped
+    Chopped,
+
+    burnt
 }
 
 public class Ingredient : MonoBehaviour, IInteractable

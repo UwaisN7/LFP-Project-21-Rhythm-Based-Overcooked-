@@ -1,24 +1,39 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
-/// <summary>
-/// Central authority for action points and combo meters.
-/// Each player's RhythmEvaluator reports results here.
-/// Keyed by playerId so this is already ready for player 2
-/// when you get to session 2 - no changes needed here.
-/// </summary>
 public class PointManager : MonoBehaviour
 {
     [System.Serializable]
     public class PlayerScore
     {
         public int ActionPoints;
-        public int ComboMeter;
+
+        public int ComboMeter => ActionPoints;
+
     }
+
+    [Header("Debug")]
+    [SerializeField] private bool debugLogging = true;
+
+    [SerializeField] private int pointsPerMultiplierTier = 100;
+
+    [SerializeField] private bool clampActionPointsAtZero = true;
+
+    [Header("Strike Penalties")]
+    [SerializeField] private int strikeActionPointPenalty = 50;
+
+    [Header("Test (Q Key)")]
+    [SerializeField] private int testOrderDifficulty = 100;
+    [SerializeField] private int testTimeLeft = 50;
+    [SerializeField] private int testPlayerId = 0;
+
+    public float player1FinalScore;
+    public float player2FinalScore;
 
     private Dictionary<int, PlayerScore> scores = new Dictionary<int, PlayerScore>();
 
-    public event System.Action<int, PlayerScore> OnScoreChanged;
+    public event System.Action<int, PlayerScore, int> OnScoreChanged;
 
     private PlayerScore GetOrCreate(int playerId)
     {
@@ -30,26 +45,93 @@ public class PointManager : MonoBehaviour
         return score;
     }
 
+    public int GetComboMultiplier(int playerId)
+    {
+        var score = GetOrCreate(playerId);
+        return Mathf.Max(1, (score.ActionPoints / pointsPerMultiplierTier) + 1);
+    }
+
     public void AddActionPoints(int playerId, int amount)
     {
         var score = GetOrCreate(playerId);
+        int previousAP = score.ActionPoints;
+        int previousMultiplier = GetComboMultiplier(playerId);
+
         score.ActionPoints += amount;
 
-        // Every successful hit grows the combo; anything that costs points resets it.
-        if (amount > 0)
-            score.ComboMeter++;
-        //else
-        //    score.ComboMeter = 0;
+        if (clampActionPointsAtZero && score.ActionPoints < 0)
+            score.ActionPoints = 0;
 
-        OnScoreChanged?.Invoke(playerId, score);
+        int newMultiplier = GetComboMultiplier(playerId);
+
+        if (debugLogging)
+        {
+            string tierChange = "";
+            if (newMultiplier > previousMultiplier)
+                tierChange = $" ^ UPGRADED {previousMultiplier}x -> {newMultiplier}x";
+            else if (newMultiplier < previousMultiplier)
+                tierChange = $" v DOWNGRADED {previousMultiplier}x -> {newMultiplier}x";
+
+            Debug.Log(
+                $"[PointManager] Player {playerId} | " +
+                $"AP: {previousAP} -> {score.ActionPoints} ({amount:+#;-#;0}) | " +
+                $"Multiplier: {newMultiplier}x{tierChange}\n" 
+
+            );
+        }
+
+        OnScoreChanged?.Invoke(playerId, score, newMultiplier);
     }
 
     public void ReportStrike(int playerId)
     {
         var score = GetOrCreate(playerId);
-        score.ComboMeter = 0;
-        OnScoreChanged?.Invoke(playerId, score);
+        int previousAP = score.ActionPoints;
+        int previousMultiplier = GetComboMultiplier(playerId);
+
+        score.ActionPoints -= strikeActionPointPenalty;
+
+        if (clampActionPointsAtZero && score.ActionPoints < 0)
+            score.ActionPoints = 0;
+
+        int newMultiplier = GetComboMultiplier(playerId);
+
+        if (debugLogging)
+        {
+            string tierChange = "";
+            if (newMultiplier > previousMultiplier)
+                tierChange = $" ^ UPGRADED {previousMultiplier}x -> {newMultiplier}x";
+            else if (newMultiplier < previousMultiplier)
+                tierChange = $" v DOWNGRADED {previousMultiplier}x -> {newMultiplier}x";
+
+            Debug.Log(
+                $"[PointManager] Player {playerId} STRUCK | " +
+                $"AP: {previousAP} -> {score.ActionPoints} (-{strikeActionPointPenalty}) | " +
+                $"Multiplier: {newMultiplier}x{tierChange}\n" 
+                
+            );
+        }
+
+        OnScoreChanged?.Invoke(playerId, score, newMultiplier);
     }
 
     public PlayerScore GetScore(int playerId) => GetOrCreate(playerId);
+
+    public float CalculateFinalScore(int playerId, int orderDifficulty, int timeLeft)
+    {
+        int multiplier = GetComboMultiplier(playerId);
+        float finalScore = (orderDifficulty + timeLeft) * multiplier;
+        return finalScore;
+    }
+
+    public void ApplyFinalScore(int playerId, int orderDifficulty, int timeLeft)
+    {
+        float final = CalculateFinalScore(playerId, orderDifficulty, timeLeft);
+        if (playerId == 0) player1FinalScore = final;
+        else if (playerId == 1) player2FinalScore = final;
+
+        Debug.Log($"[PointManager] Player {playerId} FINAL SCORE: {final} " +
+                  $"(Diff {orderDifficulty} + Time {timeLeft}) * {GetComboMultiplier(playerId)}x = {final}");
+    }
+
 }

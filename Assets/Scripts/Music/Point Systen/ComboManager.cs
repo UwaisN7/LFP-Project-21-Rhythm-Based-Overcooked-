@@ -1,11 +1,7 @@
 using TMPro;
 using UnityEngine;
 
-/// <summary>
-/// Attach to a TextMeshProUGUI (or TextMeshPro) at bottom-left (red) or
-/// bottom-right (blue). Shows "x{combo}" for one player.
-/// Stays hidden at combo 0.
-/// </summary>
+
 public class ComboManager : MonoBehaviour
 {
     [SerializeField] private PointManager pointManager;
@@ -31,13 +27,9 @@ public class ComboManager : MonoBehaviour
         label.text = "0X";
     }
 
-    private void HandleScoreChanged(int changedPlayerId, PointManager.PlayerScore score)
+    private void HandleScoreChanged(int changedPlayerId, PointManager.PlayerScore score, int multiplier)
     {
         if (changedPlayerId != playerId) return;
-
-        if (score.ComboMeter <= 0)
-            label.text = "0X";
-        else
-            label.text = "x" + score.ComboMeter;
+        label.text = "x" + multiplier;
     }
 }

@@ -10,6 +10,9 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] private PlayerRhythmSession session1;
     [SerializeField] private PlayerRhythmSession session2;
 
+    public float player1FinalScore;
+    public float player2FinalScore;
+
     private void Start()
     {
         AssignPlayers();
