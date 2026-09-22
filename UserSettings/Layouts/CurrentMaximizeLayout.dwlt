@@ -25,7 +25,7 @@ MonoBehaviour:
   m_MinSize: {x: 300, y: 112}
   m_MaxSize: {x: 24288, y: 16192}
   vertical: 0
-  controlID: 934
+  controlID: 10458
   draggingID: 0
 --- !u!114 &2
 MonoBehaviour:
@@ -204,11 +204,21 @@ MonoBehaviour:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
       m_SelectedIDs:
-      - m_rawData: 568105584918857548
+      - m_rawData: 568105589213736226
       m_LastClickedID:
-        m_rawData: 568105584918857548
+        m_rawData: 568105589213736226
       m_ExpandedIDs:
-      - m_rawData: 568105589213756050
+      - m_rawData: 568105589213736130
+      - m_rawData: 568105589213736172
+      - m_rawData: 568105589213736236
+      - m_rawData: 568105589213737038
+      - m_rawData: 568105589213737624
+      - m_rawData: 568105589213737668
+      - m_rawData: 568105589213737732
+      - m_rawData: 568105589213738552
+      - m_rawData: 568105589213753258
+      - m_rawData: 568105589213755824
+      - m_rawData: 568105584918862934
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -259,7 +269,7 @@ MonoBehaviour:
   m_MinSize: {x: 100, y: 112}
   m_MaxSize: {x: 8096, y: 16192}
   vertical: 1
-  controlID: 935
+  controlID: 10459
   draggingID: 0
 --- !u!114 &6
 MonoBehaviour:
@@ -396,12 +406,12 @@ MonoBehaviour:
       displayed: 1
       id: unity-transform-toolbar
       index: 0
-      contents: '{"m_Layout":2,"m_Collapsed":false,"m_Folded":false,"m_Floating":false,"m_FloatingSnapOffset":{"x":24.0,"y":27.199966430664064},"m_SnapOffsetDelta":{"x":0.0,"y":0.0},"m_FloatingSnapCorner":0,"m_Size":{"x":0.0,"y":0.0},"m_SizeOverridden":false}'
+      contents: '{"m_Layout":2,"m_Collapsed":false,"m_Folded":false,"m_Floating":false,"m_FloatingSnapOffset":{"x":24.0,"y":-205.46669006347657},"m_SnapOffsetDelta":{"x":0.0,"y":0.0},"m_FloatingSnapCorner":2,"m_Size":{"x":0.0,"y":0.0},"m_SizeOverridden":false}'
       floating: 0
       collapsed: 0
-      snapOffset: {x: 24, y: 27.199966}
+      snapOffset: {x: 24, y: -205.46669}
       snapOffsetDelta: {x: 0, y: 0}
-      snapCorner: 0
+      snapCorner: 2
       layout: 2
       size: {x: 0, y: 0}
       sizeOverridden: 0
@@ -867,6 +877,20 @@ MonoBehaviour:
       layout: 4
       size: {x: 0, y: 0}
       sizeOverridden: 0
+    - dockPosition: 1
+      containerId: overlay-container--right
+      displayed: 0
+      id: ProBuilder/ActionsOverlay
+      index: 11
+      contents: '{"m_Layout":4,"m_Collapsed":false,"m_Folded":false,"m_Floating":false,"m_FloatingSnapOffset":{"x":0.0,"y":0.0},"m_SnapOffsetDelta":{"x":0.0,"y":0.0},"m_FloatingSnapCorner":0,"m_Size":{"x":0.0,"y":0.0},"m_SizeOverridden":false}'
+      floating: 0
+      collapsed: 0
+      snapOffset: {x: 0, y: 0}
+      snapOffsetDelta: {x: 0, y: 0}
+      snapCorner: 0
+      layout: 4
+      size: {x: 0, y: 0}
+      sizeOverridden: 0
     m_ContainerData:
     - containerId: overlay-toolbar__top
       scrollOffset: 0
@@ -912,9 +936,9 @@ MonoBehaviour:
   m_AudioPlay: 0
   m_DebugDrawModesUseInteractiveLightBakingData: 0
   m_Position:
-    m_Target: {x: 571.8119, y: 86, z: 0}
+    m_Target: {x: -2.3139699, y: 0.9150078, z: 1.4899127}
     speed: 2
-    m_Value: {x: 571.8119, y: 86, z: 0}
+    m_Value: {x: -2.3139699, y: 0.9150078, z: 1.4899127}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -961,13 +985,13 @@ MonoBehaviour:
     m_gridOpacity: 0.552
     m_NearestPlaneToHandleMode: 0
   m_Rotation:
-    m_Target: {x: -0.023141807, y: 0.9759307, z: -0.17336783, w: -0.13027093}
+    m_Target: {x: -0.12193325, y: 0.85464007, z: -0.23267765, w: -0.44787127}
     speed: 2
-    m_Value: {x: -0.023141772, y: 0.9759292, z: -0.17336756, w: -0.13027072}
+    m_Value: {x: -0.12193296, y: 0.85463804, z: -0.2326771, w: -0.4478702}
   m_Size:
-    m_Target: 0.8660254
+    m_Target: 0.60756886
     speed: 2
-    m_Value: 0.8660254
+    m_Value: 0.60756886
   m_Ortho:
     m_Target: 0
     speed: 2
@@ -1122,7 +1146,7 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/Scripts/Music/Point Systen
+    - Assets/Scripts/Overcooked mechanics
     m_Globs: []
     m_ProductIds: 
     m_AnyWithAssetOrigin: 0
@@ -1132,7 +1156,7 @@ MonoBehaviour:
   m_ViewMode: 1
   m_StartGridSize: 61
   m_LastFolders:
-  - Assets/Scripts/Music/Point Systen
+  - Assets/Scripts/Overcooked mechanics
   m_LastFoldersGridSize: 61
   m_LastProjectPath: D:\Github project\Funkin on Overcooked\LFP Project 21 (Rhythm
     Based Overcooked)
@@ -1140,19 +1164,18 @@ MonoBehaviour:
     m_IsLocked: 0
   m_LastLocalAssetsSearchArea: 1
   m_FolderTreeState:
-    scrollPos: {x: 0, y: 119.33328}
+    scrollPos: {x: 0, y: 103.33328}
     m_SelectedIDs:
-    - m_rawData: 568105584918858366
+    - m_rawData: 568105584918860922
     m_LastClickedID:
-      m_rawData: 568105584918858366
+      m_rawData: 568105584918860922
     m_ExpandedIDs:
-    - m_rawData: 568105589213752226
+    - m_rawData: 568105589213753318
     - m_rawData: 0
-    - m_rawData: 568105584918853856
-    - m_rawData: 568105584918858066
-    - m_rawData: 568105584918858068
-    - m_rawData: 568105584918858070
-    - m_rawData: 568105584918858072
+    - m_rawData: 568105584918855448
+    - m_rawData: 568105584918860638
+    - m_rawData: 568105584918860642
+    - m_rawData: 568105584918860920
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1185,13 +1208,12 @@ MonoBehaviour:
     m_LastClickedID:
       m_rawData: 0
     m_ExpandedIDs:
-    - m_rawData: 568105589213752226
+    - m_rawData: 568105589213753318
     - m_rawData: 0
-    - m_rawData: 568105584918853856
-    - m_rawData: 568105584918858066
-    - m_rawData: 568105584918858068
-    - m_rawData: 568105584918858070
-    - m_rawData: 568105584918858072
+    - m_rawData: 568105584918855448
+    - m_rawData: 568105584918860638
+    - m_rawData: 568105584918860642
+    - m_rawData: 568105584918860920
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -1220,9 +1242,9 @@ MonoBehaviour:
       m_ResourceFile: 
   m_ListAreaState:
     m_SelectedInstanceIDs:
-    - m_rawData: 568105584918857548
+    - m_rawData: 568105589213736226
     m_LastClickedEntityId:
-      m_rawData: 568105584918857548
+      m_rawData: 568105589213736226
     m_HadKeyboardFocusLastEvent: 0
     m_ExpandedInstanceIDs:
     - m_rawData: 0
@@ -1258,7 +1280,7 @@ MonoBehaviour:
     m_ScrollPosition: {x: 0, y: 0}
     m_GridSize: 61
   m_SkipHiddenPackages: 0
-  m_DirectoriesAreaWidth: 144
+  m_DirectoriesAreaWidth: 182
 --- !u!114 &11
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -1384,7 +1406,7 @@ MonoBehaviour:
   m_LockTracker:
     m_IsLocked: 0
   m_LastSelectedObjectID:
-    m_rawData: 568105584918857548
+    m_rawData: 568105589213736226
 --- !u!114 &14
 MonoBehaviour:
   m_ObjectHideFlags: 52
