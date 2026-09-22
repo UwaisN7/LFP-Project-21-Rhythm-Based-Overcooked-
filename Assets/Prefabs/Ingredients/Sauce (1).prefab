@@ -1851,4 +1851,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d901447b8126284ca4fb7c93497a59e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Ingredient
+  ingredientType: 0
+  ingredientState: 1
   choppedVersion: {fileID: 8326348862797068176}

@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class ChoppingBoard : MonoBehaviour, IInteractable
 {
@@ -17,19 +16,18 @@ public class ChoppingBoard : MonoBehaviour, IInteractable
             if (ingredient != null)
             {
                 Debug.Log("Ingredient placed on chopping board!");
+                StartRhythmGame();
             }
+
+            return;
         }
-    }
 
-    public void OnCook(InputValue value)
-    {
-        if (!value.isPressed)
-            return;
-
-        if (ingredient == null)
-            return;
-
-        StartRhythmGame();
+        // Pick up the chopped ingredient
+        if (!player.IsHolding && ingredient != null)
+        {
+            player.Pickup(ingredient);
+            ingredient = null;
+        }
     }
 
     private void StartRhythmGame()
@@ -57,13 +55,17 @@ public class ChoppingBoard : MonoBehaviour, IInteractable
             return;
         }
 
+        // Remove old ingredient
         Destroy(ingredient);
 
+        // Create chopped ingredient
         ingredient = Instantiate(
             choppedPrefab,
             ingredientPoint.position,
             ingredientPoint.rotation,
             ingredientPoint
         );
+
+        Debug.Log("Ingredient chopped!");
     }
 }

@@ -10,6 +10,11 @@ public class PlayerInteraction : MonoBehaviour
 
     public bool IsHolding => heldObject != null;
 
+    public GameObject HeldObject
+    {
+        get { return heldObject; }
+    }
+
     public void OnInteract(InputValue value)
     {
         if (!value.isPressed)
@@ -81,5 +86,14 @@ public class PlayerInteraction : MonoBehaviour
             transform.position + transform.forward;
 
         heldObject = null;
+    }
+
+    public GameObject RemoveHeldObject()
+    {
+        GameObject objectToRemove = heldObject;
+
+        heldObject = null;
+
+        return objectToRemove;
     }
 }
