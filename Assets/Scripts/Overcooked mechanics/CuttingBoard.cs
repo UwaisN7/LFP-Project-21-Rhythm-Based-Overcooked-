@@ -81,7 +81,7 @@ private void HandleConfirm()
         waitingForStart = false;
         UnsubscribeConfirm();
 
-        // Now actually start the sequence.
+        
         rhythmSession.OnSequenceSucceeded -= HandleSequenceSucceeded;
         rhythmSession.OnSequenceFailed -= HandleSequenceFailed;
         rhythmSession.OnSequenceSucceeded += HandleSequenceSucceeded;

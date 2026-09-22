@@ -11,7 +11,13 @@ public class Oven : MonoBehaviour, IInteractable
     [Header("Final Dish")]
     [SerializeField] private GameObject finalDishPrefab;
     [SerializeField] private Transform dishSpawnPoint;
+    [Header("Rhythm")]
+    [SerializeField] private float successTimeBonus = 10f;
+    [SerializeField] private float failTimePenalty = 0f;
 
+    private PlayerRhythmSession rhythmSession;
+    private bool waitingForConfirm;
+    private bool handled;
     private GameObject plateCooking;
     private float cookingTimer;
     private bool isCooking;
@@ -80,7 +86,8 @@ public class Oven : MonoBehaviour, IInteractable
 
         if (isCooking)
         {
-            StartRhythmInteraction();
+            ArmRhythm(player);
+           
         }
     }
 
@@ -107,20 +114,81 @@ public class Oven : MonoBehaviour, IInteractable
     }
 
 
-    private void StartRhythmInteraction()
+    private void ArmRhythm(PlayerInteraction player)
     {
-        // =========================================
-        // RHYTHM SYSTEM GOES HERE
-        // =========================================
+        if (waitingForConfirm) return;
 
-        
+        rhythmSession = player.GetComponent<PlayerRhythmSession>();
+        if (rhythmSession == null)
+        {
+            Debug.LogWarning("Player has no PlayerRhythmSession!");
+            return;
+        }
+
+        waitingForConfirm = true;
+        handled = false;
+
+        rhythmSession.OnConfirmPressed -= HandleConfirm;
+        rhythmSession.OnConfirmPressed += HandleConfirm;
+    }
+
+    private void HandleConfirm()
+    {
+        if (!waitingForConfirm) return;
+        if (!isCooking) { UnsubscribeConfirm(); waitingForConfirm = false; return; }
+
+        waitingForConfirm = false;
+        UnsubscribeConfirm();
+
+        handled = false;
+
+        rhythmSession.OnSequenceSucceeded -= HandleSequenceSucceeded;
+        rhythmSession.OnSequenceFailed -= HandleSequenceFailed;
+        rhythmSession.OnSequenceSucceeded += HandleSequenceSucceeded;
+        rhythmSession.OnSequenceFailed += HandleSequenceFailed;
+
+        rhythmSession.StartSession();
+    }
+
+    private void HandleSequenceSucceeded()
+    {
+        if (handled) return;
+        handled = true;
+        Unsubscribe();
+
+        cookingTimer -= successTimeBonus;
+        if (cookingTimer <= 0f) FinishCooking();
+    }
+
+    private void HandleSequenceFailed()
+    {
+        if (handled) return;
+        handled = true;
+        Unsubscribe();
+
+        cookingTimer += failTimePenalty;
+    }
+
+    private void Unsubscribe()
+    {
+        UnsubscribeConfirm();
+        if (rhythmSession == null) return;
+        rhythmSession.OnSequenceSucceeded -= HandleSequenceSucceeded;
+        rhythmSession.OnSequenceFailed -= HandleSequenceFailed;
+    }
+
+    private void UnsubscribeConfirm()
+    {
+        if (rhythmSession == null) return;
+        rhythmSession.OnConfirmPressed -= HandleConfirm;
     }
 
 
     private void FinishCooking()
     {
         isCooking = false;
-
+        waitingForConfirm = false;  
+        Unsubscribe();
         // Hide timer
         if (timerUI != null)
         {
