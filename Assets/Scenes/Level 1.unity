@@ -224,7 +224,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1927244419}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -1609,7 +1609,7 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1780318800}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -1885,7 +1885,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 830152127}
-  m_Father: {fileID: 1907793701}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -2792,7 +2792,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 541391830}
-  m_Father: {fileID: 1907793701}
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -4283,10 +4283,8 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1954603373}
-  - {fileID: 1780318800}
-  m_Father: {fileID: 2055617245}
+  m_Children: []
+  m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -4812,13 +4810,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1888186556}
   serializedVersion: 2
-  m_LocalRotation: {x: -0.5642363, y: -0.005043563, z: 0.003446939, w: -0.8255908}
+  m_LocalRotation: {x: 0.56424594, y: 0.0014409267, z: -0.0009847773, w: 0.825605}
   m_LocalPosition: {x: -2.16, y: 15.34, z: -5.27}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 68.7, y: -359.3, z: 0}
+  m_LocalEulerAnglesHint: {x: 68.7, y: 0.2, z: 0}
 --- !u!114 &1888186560
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5417,7 +5415,11 @@ PrefabInstance:
       objectReference: {fileID: 1133201818}
     - target: {fileID: 1959487159377756662, guid: 0c17632eb74836f43be541270a417193, type: 3}
       propertyPath: useRandomDebugInput
-      value: 1
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2676259396080929473, guid: 0c17632eb74836f43be541270a417193, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -1.37
       objectReference: {fileID: 0}
     - target: {fileID: 4043033174949312782, guid: 0c17632eb74836f43be541270a417193, type: 3}
       propertyPath: musicClock
@@ -5427,6 +5429,10 @@ PrefabInstance:
       propertyPath: pointManager
       value: 
       objectReference: {fileID: 1796488123}
+    - target: {fileID: 4668416982258676101, guid: 0c17632eb74836f43be541270a417193, type: 3}
+      propertyPath: positionOffset.z
+      value: -2
+      objectReference: {fileID: 0}
     - target: {fileID: 4988154884440071312, guid: 0c17632eb74836f43be541270a417193, type: 3}
       propertyPath: upPrefab
       value: 
@@ -5455,6 +5461,14 @@ PrefabInstance:
       propertyPath: musicClock
       value: 
       objectReference: {fileID: 1133201818}
+    - target: {fileID: 6744161452848573297, guid: 0c17632eb74836f43be541270a417193, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.8100001
+      objectReference: {fileID: 0}
+    - target: {fileID: 8691979048214709756, guid: 0c17632eb74836f43be541270a417193, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -1.38
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:
@@ -5514,6 +5528,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 401419996597668093, guid: 97ae90eb9c74b014890aafd413f0a1a5, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -1.38
+      objectReference: {fileID: 0}
     - target: {fileID: 1443865756795478627, guid: 97ae90eb9c74b014890aafd413f0a1a5, type: 3}
       propertyPath: musicClock
       value: 
@@ -5556,7 +5574,19 @@ PrefabInstance:
       objectReference: {fileID: 1133201818}
     - target: {fileID: 5051809640582860190, guid: 97ae90eb9c74b014890aafd413f0a1a5, type: 3}
       propertyPath: useRandomDebugInput
-      value: 1
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6204986683479136044, guid: 97ae90eb9c74b014890aafd413f0a1a5, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -1.3699999
+      objectReference: {fileID: 0}
+    - target: {fileID: 7318094802350879026, guid: 97ae90eb9c74b014890aafd413f0a1a5, type: 3}
+      propertyPath: positionOffset.z
+      value: -2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8234699864883437552, guid: 97ae90eb9c74b014890aafd413f0a1a5, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.8100001
       objectReference: {fileID: 0}
     - target: {fileID: 8909812466917104915, guid: 97ae90eb9c74b014890aafd413f0a1a5, type: 3}
       propertyPath: m_LocalPosition.x
@@ -5668,3 +5698,8 @@ SceneRoots:
   - {fileID: 1169557904}
   - {fileID: 2063334891}
   - {fileID: 237539031}
+  - {fileID: 23859539}
+  - {fileID: 528023082}
+  - {fileID: 557712299}
+  - {fileID: 1095784189}
+  - {fileID: 1740569975}
