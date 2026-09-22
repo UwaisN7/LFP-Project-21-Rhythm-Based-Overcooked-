@@ -13,10 +13,10 @@ GameObject:
   - component: {fileID: 4721607766718550171}
   - component: {fileID: 4608461467668824589}
   - component: {fileID: 3468625899255807671}
-  - component: {fileID: 3200306467220165612}
   - component: {fileID: 1100967268918777276}
   - component: {fileID: 4582971347792174148}
-  m_Layer: 0
+  - component: {fileID: 7812871963632534732}
+  m_Layer: 7
   m_Name: Cheese (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -317,28 +317,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8838855958300821845}
   m_Mesh: {fileID: 0}
---- !u!64 &3200306467220165612
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8838855958300821845}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 0}
 --- !u!54 &1100967268918777276
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -361,10 +339,10 @@ Rigidbody:
     m_Bits: 0
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
-  m_UseGravity: 1
+  m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 126
   m_CollisionDetection: 0
 --- !u!114 &4582971347792174148
 MonoBehaviour:
@@ -378,3 +356,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d901447b8126284ca4fb7c93497a59e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Ingredient
+  choppedVersion: {fileID: 1300423279086652427, guid: 93c5a0dff112ef34097621b4caa0cc1d, type: 3}
+--- !u!65 &7812871963632534732
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8838855958300821845}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}

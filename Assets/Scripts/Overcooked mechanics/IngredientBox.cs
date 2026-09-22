@@ -2,7 +2,6 @@ using UnityEngine;
 
 public class IngredientBox : MonoBehaviour, IInteractable
 {
-    [Header("Ingredient")]
     [SerializeField] private GameObject ingredientPrefab;
 
     public void Interact(PlayerInteraction player)
@@ -12,6 +11,6 @@ public class IngredientBox : MonoBehaviour, IInteractable
 
         GameObject ingredient = Instantiate(ingredientPrefab);
 
-        player.TryPickup(ingredient);
+        player.Pickup(ingredient);
     }
 }
