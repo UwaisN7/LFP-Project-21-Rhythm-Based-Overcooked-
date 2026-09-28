@@ -95,6 +95,7 @@ public class PlayerRhythmSession : MonoBehaviour
 
         evaluator.BeginSequence(sequence);
         laneUI?.Display(promptList);
+        Debug.Log($"PlayerRhythmSession: BeginSequence with {promptList.Count} prompts.");
     }
     private void HandleSequenceComplete()
     {
