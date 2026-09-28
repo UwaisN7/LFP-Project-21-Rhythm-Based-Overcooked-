@@ -10,6 +10,16 @@ public class PlayerInteraction : MonoBehaviour
 
     public bool IsHolding => heldObject != null;
     public int PlayerId { get; set; }
+   
+
+    private static int nextPlayerId = 0;
+
+    private void Awake()
+    {
+        PlayerId = nextPlayerId++;
+        Debug.Log($"[PlayerInteraction] PlayerId set to {PlayerId}");
+    }
+    
     public GameObject HeldObject
     {
         get { return heldObject; }
