@@ -79,8 +79,9 @@ public class DeliveryStation : MonoBehaviour, IInteractable
     private void DebugTestDelivery()
     {
         if (debugLogging)
-            Debug.Log($"[DeliveryStation] DEBUG: Space pressed — simulating delivery for Player {debugPlayerId}");
+            Debug.Log("[DeliveryStation] DEBUG: Space pressed — simulating delivery for ALL players");
 
-        DeliverPizza(debugPlayerId);
+        DeliverPizza(0);
+        DeliverPizza(1);
     }
 }
