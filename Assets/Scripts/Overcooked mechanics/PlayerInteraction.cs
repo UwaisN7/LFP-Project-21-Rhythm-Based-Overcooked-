@@ -14,6 +14,9 @@ public class PlayerInteraction : MonoBehaviour
 
     private static int nextPlayerId = 0;
 
+    private Outline currentOutline;
+
+
     private void Awake()
     {
         PlayerId = nextPlayerId++;
@@ -58,9 +61,34 @@ public class PlayerInteraction : MonoBehaviour
         }
     }
 
-    public void SetInteractable(IInteractable interactable)
+    public void SetInteractable(IInteractable newInteractable)
     {
-        currentInteractable = interactable;
+        // Turn off previous outline
+        if (currentOutline != null)
+        {
+            currentOutline.enabled = false;
+            currentOutline = null;
+        }
+
+        currentInteractable = newInteractable;
+
+        // Turn on new outline
+        if (currentInteractable != null)
+        {
+            MonoBehaviour interactableObject =
+                currentInteractable as MonoBehaviour;
+
+            if (interactableObject != null)
+            {
+                currentOutline =
+                    interactableObject.GetComponentInParent<Outline>();
+
+                if (currentOutline != null)
+                {
+                    currentOutline.enabled = true;
+                }
+            }
+        }
     }
 
     public void Pickup(GameObject objectToPickup)
@@ -69,7 +97,7 @@ public class PlayerInteraction : MonoBehaviour
 
         objectToPickup.transform.SetParent(holdPoint);
         objectToPickup.transform.localPosition = Vector3.zero;
-        objectToPickup.transform.localRotation = Quaternion.identity;
+        //objectToPickup.transform.localRotation = Quaternion.identity;
     }
 
     public GameObject PlaceHeldObject(Transform placementPoint)
@@ -83,7 +111,7 @@ public class PlayerInteraction : MonoBehaviour
 
         objectToPlace.transform.SetParent(placementPoint);
         objectToPlace.transform.localPosition = Vector3.zero;
-        objectToPlace.transform.localRotation = Quaternion.identity;
+        //objectToPlace.transform.localRotation = Quaternion.identity;
 
         return objectToPlace;
     }

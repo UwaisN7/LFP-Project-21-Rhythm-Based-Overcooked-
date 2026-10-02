@@ -879,6 +879,7 @@ GameObject:
   - component: {fileID: 8807318057064444329}
   - component: {fileID: 4613727700470843764}
   - component: {fileID: 1258190908947934857}
+  - component: {fileID: -1215935957122145921}
   m_Layer: 0
   m_Name: Oven
   m_TagString: Untagged
@@ -1270,6 +1271,26 @@ MonoBehaviour:
   timerUI: {fileID: 323695284544147844}
   finalDishPrefab: {fileID: 4846504040934113741, guid: 29e0065c67b315248b4b6bfb4cde86a8, type: 3}
   dishSpawnPoint: {fileID: 5207030071727941949}
+  successTimeBonus: 10
+  failTimePenalty: 0
+--- !u!114 &-1215935957122145921
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5212901994821305063}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Outline
+  outlineMode: 0
+  outlineColor: {r: 1, g: 1, b: 1, a: 1}
+  outlineWidth: 2
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
 --- !u!1 &5579156534494088306
 GameObject:
   m_ObjectHideFlags: 0
