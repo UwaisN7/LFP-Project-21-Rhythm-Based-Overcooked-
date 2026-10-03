@@ -207,10 +207,10 @@ public class Oven : MonoBehaviour, IInteractable
         // Spawn final dish
         if (finalDishPrefab != null)
         {
-            Instantiate(
+            GameObject finalDish = Instantiate<GameObject>(
                 finalDishPrefab,
                 dishSpawnPoint.position,
-                dishSpawnPoint.rotation
+                finalDishPrefab.transform.rotation
             );
         }
         else

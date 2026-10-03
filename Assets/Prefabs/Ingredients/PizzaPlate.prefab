@@ -4229,6 +4229,7 @@ GameObject:
   - component: {fileID: 6967584823347390092}
   - component: {fileID: 8250687515034684159}
   - component: {fileID: 758718264631116422}
+  - component: {fileID: 3613862336037513370}
   m_Layer: 0
   m_Name: PizzaPlate
   m_TagString: Untagged
@@ -5580,3 +5581,21 @@ MonoBehaviour:
   tomatoVisual: {fileID: 4658860452901393509}
   cheeseVisual: {fileID: 1575315795401974662}
   doughVisual: {fileID: 3454265289081147872}
+--- !u!114 &3613862336037513370
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9119470381733789544}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Outline
+  outlineMode: 0
+  outlineColor: {r: 1, g: 1, b: 1, a: 1}
+  outlineWidth: 2
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
