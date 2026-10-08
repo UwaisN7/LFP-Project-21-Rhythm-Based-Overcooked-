@@ -34,11 +34,13 @@ public class GameManager : MonoBehaviour
     {
         if (pointManager == null)
             pointManager = FindAnyObjectByType<PointManager>();
+SetState(GameState.PreGame);
+
     }
 
     private void Start()
     {
-        SetState(GameState.PreGame);
+        
     }
 
     private void Update()
