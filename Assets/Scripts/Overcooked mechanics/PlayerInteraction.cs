@@ -9,17 +9,17 @@ public class PlayerInteraction : MonoBehaviour
     private GameObject heldObject;
 
     public bool IsHolding => heldObject != null;
-    public int PlayerId { get; set; }
+    public int PlayerId;
    
 
-    private static int nextPlayerId = 0;
+    //private static int nextPlayerId = 0;
 
     private Outline currentOutline;
 
 
     private void Awake()
     {
-        PlayerId = nextPlayerId++;
+        //PlayerId = nextPlayerId++;
         Debug.Log($"[PlayerInteraction] PlayerId set to {PlayerId}");
     }
     
