@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 2234699690605102072}
   - component: {fileID: 1967475858868788292}
   - component: {fileID: 2197254986420492656}
+  - component: {fileID: 2245680260064973696}
   m_Layer: 0
   m_Name: CutCheese (2)
   m_TagString: Untagged
@@ -101,6 +102,24 @@ MonoBehaviour:
   ingredientType: 1
   ingredientState: 1
   choppedVersion: {fileID: 1300423279086652427}
+--- !u!114 &2245680260064973696
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1300423279086652427}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Outline
+  outlineMode: 0
+  outlineColor: {r: 1, g: 1, b: 1, a: 1}
+  outlineWidth: 2
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
 --- !u!1 &3018055306648208071
 GameObject:
   m_ObjectHideFlags: 0

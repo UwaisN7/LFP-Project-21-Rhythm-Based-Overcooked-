@@ -132,11 +132,11 @@ private void HandleConfirm()
 
         // Create chopped ingredient
         ingredient = Instantiate(
-            choppedPrefab,
-            ingredientPoint.position,
-            ingredientPoint.rotation,
-            ingredientPoint
-        );
+     choppedPrefab,
+     ingredientPoint.position,
+     choppedPrefab.transform.rotation,
+     ingredientPoint
+ );
 
         Debug.Log("Ingredient chopped!");
     }

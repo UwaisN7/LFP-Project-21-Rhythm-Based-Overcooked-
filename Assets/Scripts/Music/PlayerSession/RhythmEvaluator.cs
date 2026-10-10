@@ -61,12 +61,13 @@ public class RhythmEvaluator : MonoBehaviour
 Debug.Log($"[Eval] P{playerId} dir={direction} | press={songTimeOfPress:F4} " +
           $"target={current.TargetSongTime:F4} diff={diff * 1000:F1}ms " +
           $"window=±{hitWindowSeconds * 1000:F1}ms");
-        //if (direction != current.RequiredDirection)
-        //{
-        //    Resolve(current, AnswerPrompt.Result.Wrong);
-        //    return; //Comment this bitch out if its all returning wrong because yeah screw u u stupif pice of shit 
-        //}
-         if (diff < -hitWindowSeconds)
+
+        if (direction != current.RequiredDirection)
+        {
+            Resolve(current, AnswerPrompt.Result.Wrong);
+            return; //Comment this bitch out if its all returning wrong because yeah screw u u stupif pice of shit 
+        }
+        if (diff < -hitWindowSeconds)
         {
             Resolve(current, AnswerPrompt.Result.Early);
         }

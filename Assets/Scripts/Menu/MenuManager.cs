@@ -1,6 +1,8 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using UnityEngine.SceneManagement;
+
 #if ENABLE_INPUT_SYSTEM
 using UnityEngine.InputSystem;
 #endif
@@ -63,10 +65,9 @@ public class MenuManager : MonoBehaviour
 
     private void StartPlaying()
     {
-        state = State.Playing;
-        menuPanel.SetActive(false);
-        controlsPanel.SetActive(false);
         SetGameFrozen(false);
+        SceneManager.LoadScene(1);
+        state = State.Playing;
     }
 
     public void Pause()
