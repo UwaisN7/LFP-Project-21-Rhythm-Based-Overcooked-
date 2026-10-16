@@ -17785,32 +17785,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 71fdf272be223b34e9ba1bbd70e18fa7, type: 3}
---- !u!1 &1861894508 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3039540088428486296, guid: 0c17632eb74836f43be541270a417193, type: 3}
-  m_PrefabInstance: {fileID: 2645325016597386981}
-  m_PrefabAsset: {fileID: 0}
---- !u!65 &1861894511
-BoxCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1861894508}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 1
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Size: {x: 1, y: 1, z: 1}
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!43 &1864563806
 Mesh:
   m_ObjectHideFlags: 0
@@ -21465,7 +21439,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1431492006279955262, guid: 0c17632eb74836f43be541270a417193, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1431492006279955262, guid: 0c17632eb74836f43be541270a417193, type: 3}
       propertyPath: m_LocalRotation.x
@@ -21473,7 +21447,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1431492006279955262, guid: 0c17632eb74836f43be541270a417193, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1431492006279955262, guid: 0c17632eb74836f43be541270a417193, type: 3}
       propertyPath: m_LocalRotation.z
@@ -21485,7 +21459,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1431492006279955262, guid: 0c17632eb74836f43be541270a417193, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
+      value: 180
       objectReference: {fileID: 0}
     - target: {fileID: 1431492006279955262, guid: 0c17632eb74836f43be541270a417193, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
@@ -21504,32 +21478,16 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1796488123}
     - target: {fileID: 4988154884440071312, guid: 0c17632eb74836f43be541270a417193, type: 3}
-      propertyPath: upPrefab
-      value: 
-      objectReference: {fileID: 4053969468721476638, guid: 8ab3244adfaaf1b45a66f4aafd5bd224, type: 3}
-    - target: {fileID: 4988154884440071312, guid: 0c17632eb74836f43be541270a417193, type: 3}
-      propertyPath: downPrefab
-      value: 
-      objectReference: {fileID: 1755640933571845900, guid: 2314106786cb003419bcab882c7ba928, type: 3}
-    - target: {fileID: 4988154884440071312, guid: 0c17632eb74836f43be541270a417193, type: 3}
-      propertyPath: leftPrefab
-      value: 
-      objectReference: {fileID: 3806486874256504687, guid: 56bc36d485a2db64b8fa2323350b0be1, type: 3}
-    - target: {fileID: 4988154884440071312, guid: 0c17632eb74836f43be541270a417193, type: 3}
       propertyPath: musicClock
       value: 
       objectReference: {fileID: 1133201818}
-    - target: {fileID: 4988154884440071312, guid: 0c17632eb74836f43be541270a417193, type: 3}
-      propertyPath: rightPrefab
-      value: 
-      objectReference: {fileID: 1080253897776133611, guid: dcfc8873fd59d0f419fc5accb26ca212, type: 3}
     - target: {fileID: 5149095708422670673, guid: 0c17632eb74836f43be541270a417193, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.01
+      value: -0.36
       objectReference: {fileID: 0}
     - target: {fileID: 5149095708422670673, guid: 0c17632eb74836f43be541270a417193, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.71
+      value: 0.53
       objectReference: {fileID: 0}
     - target: {fileID: 5751854722732838704, guid: 0c17632eb74836f43be541270a417193, type: 3}
       propertyPath: m_Name
@@ -21539,34 +21497,14 @@ PrefabInstance:
       propertyPath: musicClock
       value: 
       objectReference: {fileID: 1133201818}
-    - target: {fileID: 8262255157879831158, guid: 0c17632eb74836f43be541270a417193, type: 3}
-      propertyPath: m_LocalScale.x
-      value: 1
+    - target: {fileID: 8918308946357139401, guid: 0c17632eb74836f43be541270a417193, type: 3}
+      propertyPath: m_Enabled
+      value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 8262255157879831158, guid: 0c17632eb74836f43be541270a417193, type: 3}
-      propertyPath: m_LocalScale.y
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8262255157879831158, guid: 0c17632eb74836f43be541270a417193, type: 3}
-      propertyPath: m_LocalScale.z
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8262255157879831158, guid: 0c17632eb74836f43be541270a417193, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8262255157879831158, guid: 0c17632eb74836f43be541270a417193, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0.5
-      objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 3390211656753339117, guid: 0c17632eb74836f43be541270a417193, type: 3}
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 3039540088428486296, guid: 0c17632eb74836f43be541270a417193, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1861894511}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0c17632eb74836f43be541270a417193, type: 3}
 --- !u!1001 &3797723521011250465
 PrefabInstance:
