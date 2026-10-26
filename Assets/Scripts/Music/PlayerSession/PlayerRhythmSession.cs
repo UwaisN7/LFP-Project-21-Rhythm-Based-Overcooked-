@@ -15,7 +15,7 @@ public class PlayerRhythmSession : MonoBehaviour
     [Header("Debug / no ingredients yet")]
     [SerializeField] private bool useRandomDebugInput = false;
     [SerializeField] private Gamepad targetGamepad;
-    [SerializeField] private int debugPatternLength = 4;
+   public int debugPatternLength = 4;
     private bool sessionActive;
     public event System.Action OnSequenceSucceeded;
     public event System.Action OnSequenceFailed;
