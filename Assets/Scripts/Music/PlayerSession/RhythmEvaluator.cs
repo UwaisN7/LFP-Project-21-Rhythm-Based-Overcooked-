@@ -92,25 +92,28 @@ Debug.Log($"[Eval] P{playerId} dir={direction} | press={songTimeOfPress:F4} " +
         switch (result)
         {
             case AnswerPrompt.Result.Early:
-                pointManager?.AddActionPoints(playerId, -25);
-                Debug.Log("`Plyaer hit early no penalty but no points");
+                pointManager?.AddActionPoints(playerId, 10);
+                pointManager?.LogAction(playerId, "<color=green>EARLY +10</color>");
+                break;
                 break;
 
             case AnswerPrompt.Result.OnBeat:
                 pointManager?.AddActionPoints(playerId, 50);
-                Debug.Log("Added Points player hit on beat");
+                pointManager?.LogAction(playerId, "<color=green>PERFECT+50</color>");
                 break;
 
             case AnswerPrompt.Result.Wrong:
                 pointManager?.AddActionPoints(playerId, -50);
-                Debug.Log("Losing Points");
+                pointManager?.LogAction(playerId, "<color=red>WRONG-50</color>");
                 RegisterStrike();
                 break;
 
             case AnswerPrompt.Result.Late:
-                Debug.Log("Player hit late so they might burn");
+                pointManager?.AddActionPoints(playerId, -50);
+                pointManager?.LogAction(playerId, "<color=red>LATE -50</color>");
                 RegisterStrike();
                 break;
+               
         }
 
         OnPromptResolved?.Invoke(prompt);
