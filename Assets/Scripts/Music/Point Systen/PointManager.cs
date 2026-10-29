@@ -40,6 +40,8 @@ public class PointManager : MonoBehaviour
     [SerializeField] private int actionPointsLostPerSecond = 30;
 
     private Dictionary<int, float> lastActionTimes = new Dictionary<int, float>();
+
+    private Dictionary<int, float> decayAccumulators = new Dictionary<int, float>(); // NEW
     public event System.Action<int, string> OnActionLogged; // Ultrakill feed event
 
     private PlayerScore GetOrCreate(int playerId)
@@ -63,10 +65,29 @@ public class PointManager : MonoBehaviour
             {
                 if (kvp.Value.ActionPoints > 0)
                 {
-                    kvp.Value.ActionPoints -= Mathf.RoundToInt(actionPointsLostPerSecond * Time.deltaTime);
-                    if (kvp.Value.ActionPoints < 0) kvp.Value.ActionPoints = 0;
+                    // Ensure the accumulator exists for this player
+                    if (!decayAccumulators.ContainsKey(pId)) decayAccumulators[pId] = 0f;
 
-                    OnScoreChanged?.Invoke(pId, kvp.Value, GetComboMultiplier(pId));
+                    // Accumulate the fractional decay for this frame
+                    decayAccumulators[pId] += actionPointsLostPerSecond * Time.deltaTime;
+
+                    // If we've built up at least 1 full point of decay, subtract it
+                    int pointsToDrop = Mathf.FloorToInt(decayAccumulators[pId]);
+
+                    if (pointsToDrop > 0)
+                    {
+                        kvp.Value.ActionPoints -= pointsToDrop;
+                        decayAccumulators[pId] -= pointsToDrop; // Remove the whole numbers, keep the remainder
+
+                        if (kvp.Value.ActionPoints < 0) kvp.Value.ActionPoints = 0;
+
+                        OnScoreChanged?.Invoke(pId, kvp.Value, GetComboMultiplier(pId));
+                    }
+                }
+                else
+                {
+                    // Reset the accumulator once they hit rock bottom
+                    decayAccumulators[pId] = 0f;
                 }
             }
         }

@@ -19,7 +19,11 @@ public class RhythmEvaluator : MonoBehaviour
     public event System.Action OnSequenceComplete;
     private Queue<AnswerPrompt> activePrompts = new Queue<AnswerPrompt>();
     private int strikes = 0;
+    [Tooltip("The base hit window at 1x multiplier")]
+    [SerializeField] private double baseHitWindowSeconds = 0.12;
 
+    // The actual hit window used in calculations
+    private double currentHitWindow;
     private void OnEnable()
     {
         if (inputManager != null)
@@ -32,12 +36,18 @@ public class RhythmEvaluator : MonoBehaviour
             inputManager.OnDirectionPressed -= HandleInput;
     }
     //sdrrge5h
-    public void BeginSequence(Queue<AnswerPrompt> prompts)
+   public void BeginSequence(Queue<AnswerPrompt> prompts)
     {
         activePrompts = prompts;
         strikes = 0;
-    }
 
+        // --- OVERDRIVE STRICTNESS ---
+        int currentMultiplier = pointManager != null ? pointManager.GetComboMultiplier(playerId) : 1;
+        float speedScale = Mathf.Clamp(currentMultiplier, 1f, 4f);
+        
+        // The window gets smaller the higher the combo goes
+        currentHitWindow = baseHitWindowSeconds / speedScale; 
+    }
     private void Update()
     {
         if (activePrompts.Count == 0 || musicClock == null) return;

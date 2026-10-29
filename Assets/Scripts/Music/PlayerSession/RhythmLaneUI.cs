@@ -46,7 +46,11 @@ public class RhythmLaneUI : MonoBehaviour
     [SerializeField] private AudioClip wrongSound;
     [SerializeField] private AudioClip lateSound;
     [SerializeField] private AudioClip earlySound;
+    [Header("Dynamic Overdrive")]
+    [SerializeField] private PointManager pointManager;
+    [SerializeField] private int playerId = 0;
 
+    [SerializeField] private float baseTravelTimeSeconds = 1.5f;
     private readonly List<RhythmArrow> activeArrows = new List<RhythmArrow>();
 
     private void OnEnable()
@@ -71,6 +75,15 @@ public class RhythmLaneUI : MonoBehaviour
             return;
         }
 
+        // --- OVERDRIVE MATH ---
+        // Get the current multiplier. If it's a 3x multiplier, the arrows travel 3x faster
+        int currentMultiplier = pointManager != null ? pointManager.GetComboMultiplier(playerId) : 1;
+
+        // Prevent it from becoming completely instantaneous at SSS rank
+        float speedScale = Mathf.Clamp(currentMultiplier, 1f, 4f);
+        travelTimeSeconds = baseTravelTimeSeconds / speedScale;
+        // ----------------------
+
         Vector3 spawnPos = GetPos(spawnPoint);
         Vector3 hitPos = GetPos(hitLine);
 
@@ -91,13 +104,13 @@ public class RhythmLaneUI : MonoBehaviour
                 continue;
             }
 
+            // This will now use the dynamically scaled travelTimeSeconds
             double spawnTime = prompt.TargetSongTime - travelTimeSeconds;
             arrow.Setup(prompt, musicClock, spawnTime, spawnPos, hitPos);
 
             activeArrows.Add(arrow);
         }
     }
-
     private Vector3 GetPos(Transform t)
     {
         if (t is RectTransform rt)

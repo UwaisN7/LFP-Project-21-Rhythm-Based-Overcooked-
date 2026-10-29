@@ -16184,8 +16184,8 @@ MonoBehaviour:
   playerId: 0
   styleRankLabel: {fileID: 1243191060}
   actionFeedLabel: {fileID: 1833128821}
-  maxFeedLines: 3
-  feedClearTime: 1.5
+  maxFeedLines: 2
+  feedClearTime: 0.5
 --- !u!114 &1581543597
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -17925,8 +17925,8 @@ MonoBehaviour:
   testPlayerId: 0
   player1FinalScore: 0
   player2FinalScore: 0
-  timeBeforeDecayStarts: 1.5
-  actionPointsLostPerSecond: 30
+  timeBeforeDecayStarts: 2
+  actionPointsLostPerSecond: 10
 --- !u!114 &1796488124
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -22236,9 +22236,17 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1133201818}
     - target: {fileID: 1959487159377756662, guid: 0c17632eb74836f43be541270a417193, type: 3}
+      propertyPath: debugPatternLength
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 1959487159377756662, guid: 0c17632eb74836f43be541270a417193, type: 3}
       propertyPath: useRandomDebugInput
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3400414116381081585, guid: 0c17632eb74836f43be541270a417193, type: 3}
+      propertyPath: pointManager
+      value: 
+      objectReference: {fileID: 1796488123}
     - target: {fileID: 4043033174949312782, guid: 0c17632eb74836f43be541270a417193, type: 3}
       propertyPath: musicClock
       value: 
@@ -22255,6 +22263,10 @@ PrefabInstance:
       propertyPath: audioSource
       value: 
       objectReference: {fileID: 1425200209}
+    - target: {fileID: 4988154884440071312, guid: 0c17632eb74836f43be541270a417193, type: 3}
+      propertyPath: pointManager
+      value: 
+      objectReference: {fileID: 1796488123}
     - target: {fileID: 5149095708422670673, guid: 0c17632eb74836f43be541270a417193, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.36
@@ -22303,6 +22315,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player 2
       objectReference: {fileID: 0}
+    - target: {fileID: 2654788048231622321, guid: 97ae90eb9c74b014890aafd413f0a1a5, type: 3}
+      propertyPath: playerId
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2654788048231622321, guid: 97ae90eb9c74b014890aafd413f0a1a5, type: 3}
+      propertyPath: pointManager
+      value: 
+      objectReference: {fileID: 1796488123}
     - target: {fileID: 2808285233829838860, guid: 97ae90eb9c74b014890aafd413f0a1a5, type: 3}
       propertyPath: musicClock
       value: 
@@ -22311,6 +22331,10 @@ PrefabInstance:
       propertyPath: audioSource
       value: 
       objectReference: {fileID: 1602374691}
+    - target: {fileID: 2808285233829838860, guid: 97ae90eb9c74b014890aafd413f0a1a5, type: 3}
+      propertyPath: pointManager
+      value: 
+      objectReference: {fileID: 1796488123}
     - target: {fileID: 4482599601664917654, guid: 97ae90eb9c74b014890aafd413f0a1a5, type: 3}
       propertyPath: musicClock
       value: 
