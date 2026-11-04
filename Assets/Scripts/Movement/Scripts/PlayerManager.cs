@@ -1,7 +1,8 @@
 using System;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.InputSystem;
-using UnityEngine.InputSystem.Users; // Required for deep InputUser access
+using UnityEngine.InputSystem.Users;
 
 public class PlayerManager : MonoBehaviour
 {
@@ -11,6 +12,10 @@ public class PlayerManager : MonoBehaviour
 
     [SerializeField] private PlayerRhythmSession session1;
     [SerializeField] private PlayerRhythmSession session2;
+
+    [Header("UI Icons")]
+    [SerializeField] private Image player1Icon;
+    [SerializeField] private Image player2Icon;
 
     public float player1FinalScore;
     public float player2FinalScore;
@@ -22,15 +27,14 @@ public class PlayerManager : MonoBehaviour
     private Gamepad pad1;
     private Gamepad pad2;
 
+    private Gamepad simulatedGamepad;
     private void OnEnable()
     {
-        // 1. Force Unity to stop auto-switching devices on us
         if (player1 != null) player1.neverAutoSwitchControlSchemes = true;
         if (player2 != null) player2.neverAutoSwitchControlSchemes = true;
 
         InputSystem.onDeviceChange += HandleDeviceChange;
 
-        // Scan for currently connected controllers
         foreach (var gamepad in Gamepad.all)
         {
             ConnectDevice(gamepad);
@@ -41,7 +45,21 @@ public class PlayerManager : MonoBehaviour
     {
         InputSystem.onDeviceChange -= HandleDeviceChange;
     }
+    private void Update()
+    {
+        // Press 'C' to simulate connecting a controller
+        if (Keyboard.current.cKey.wasPressedThisFrame && simulatedGamepad == null)
+        {
+            simulatedGamepad = InputSystem.AddDevice<Gamepad>();
+        }
 
+        // Press 'D' to simulate disconnecting the controller
+        if (Keyboard.current.dKey.wasPressedThisFrame && simulatedGamepad != null)
+        {
+            InputSystem.RemoveDevice(simulatedGamepad);
+            simulatedGamepad = null;
+        }
+    }
     private void HandleDeviceChange(InputDevice device, InputDeviceChange change)
     {
         if (device is not Gamepad gamepad) return;
@@ -66,11 +84,13 @@ public class PlayerManager : MonoBehaviour
         if (pad1 == null && pad2 != gamepad)
         {
             pad1 = gamepad;
+            if (player1Icon != null) player1Icon.color = Color.green;
             AssignGamepad(player1, session1, pad1);
         }
         else if (pad2 == null && pad1 != gamepad)
         {
             pad2 = gamepad;
+            if (player2Icon != null) player2Icon.color = Color.green;
             AssignGamepad(player2, session2, pad2);
         }
     }
@@ -82,11 +102,13 @@ public class PlayerManager : MonoBehaviour
         if (pad1 == gamepad)
         {
             pad1 = null;
+            if (player1Icon != null) player1Icon.color = Color.red;
             ClearGamepad(player1, session1);
         }
         else if (pad2 == gamepad)
         {
             pad2 = null;
+            if (player2Icon != null) player2Icon.color = Color.red;
             ClearGamepad(player2, session2);
         }
     }
@@ -95,10 +117,9 @@ public class PlayerManager : MonoBehaviour
     {
         if (player != null && gamepad != null)
         {
-            // THE FIX: Bypass the high-level wrapper and hard-lock the device
-            player.user.UnpairDevices(); // Strip away Unity's chaotic ghost-assignments
-            InputUser.PerformPairingWithDevice(gamepad, player.user); // Hard-assign the exact pad
-            player.SwitchCurrentControlScheme(gamepad); // Update the visual scheme
+            player.user.UnpairDevices();
+            InputUser.PerformPairingWithDevice(gamepad, player.user);
+            player.SwitchCurrentControlScheme(gamepad);
 
             Debug.Log($"{player.name} strictly locked to {gamepad.displayName}");
         }

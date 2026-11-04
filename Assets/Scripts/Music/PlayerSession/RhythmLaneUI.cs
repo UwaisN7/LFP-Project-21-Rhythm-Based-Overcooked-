@@ -9,8 +9,6 @@ public class RhythmLaneUI : MonoBehaviour
     [Header("Refs")]
     [SerializeField] private MusicClock musicClock;
     [SerializeField] private RhythmEvaluator evaluator;
-
-    [Tooltip("Optional parent for spawned arrows. If null, arrows are spawned at the scene root.")]
     [SerializeField] private Transform laneParent;
 
     [Header("Layout (empty transforms)")]
@@ -25,7 +23,6 @@ public class RhythmLaneUI : MonoBehaviour
     [SerializeField] private GameObject rightPrefab;
 
     [Header("Visual Feedback")]
-    [Tooltip("Prefab with RhythmFeedbackText + TextMeshPro. Spawned at hitLine on resolve.")]
     [SerializeField] private TextMeshPro feedbackTextPrefab;
     [SerializeField] private string onBeatMessage = "PERFECT!";
     [SerializeField] private string wrongMessage = "WRONG!";
@@ -46,12 +43,24 @@ public class RhythmLaneUI : MonoBehaviour
     [SerializeField] private AudioClip wrongSound;
     [SerializeField] private AudioClip lateSound;
     [SerializeField] private AudioClip earlySound;
+
     [Header("Dynamic Overdrive")]
     [SerializeField] private PointManager pointManager;
     [SerializeField] private int playerId = 0;
-
     [SerializeField] private float baseTravelTimeSeconds = 1.5f;
+
+    [Header("Decorations")]
+    [SerializeField] private GameObject greenStars;
+
     private readonly List<RhythmArrow> activeArrows = new List<RhythmArrow>();
+
+    private void Start()
+    {
+        if (greenStars != null)
+        {
+            greenStars.SetActive(false);
+        }
+    }
 
     private void OnEnable()
     {
@@ -71,18 +80,12 @@ public class RhythmLaneUI : MonoBehaviour
 
         if (musicClock == null || spawnPoint == null || hitLine == null)
         {
-            Debug.LogError($"{nameof(RhythmLaneUI)}: missing musicClock / spawnPoint / hitLine.", this);
             return;
         }
 
-        // --- OVERDRIVE MATH ---
-        // Get the current multiplier. If it's a 3x multiplier, the arrows travel 3x faster
         int currentMultiplier = pointManager != null ? pointManager.GetComboMultiplier(playerId) : 1;
-
-        // Prevent it from becoming completely instantaneous at SSS rank
         float speedScale = Mathf.Clamp(currentMultiplier, 1f, 4f);
         travelTimeSeconds = baseTravelTimeSeconds / speedScale;
-        // ----------------------
 
         Vector3 spawnPos = GetPos(spawnPoint);
         Vector3 hitPos = GetPos(hitLine);
@@ -90,27 +93,27 @@ public class RhythmLaneUI : MonoBehaviour
         foreach (AnswerPrompt prompt in prompts)
         {
             GameObject prefab = PrefabFor(prompt.RequiredDirection);
-            if (prefab == null)
-            {
-                Debug.LogError($"{nameof(RhythmLaneUI)}: no prefab for direction {prompt.RequiredDirection}.", this);
-                continue;
-            }
+            if (prefab == null) continue;
 
             GameObject instance = Instantiate(prefab, laneParent);
             if (!instance.TryGetComponent(out RhythmArrow arrow))
             {
-                Debug.LogError($"{nameof(RhythmLaneUI)}: prefab '{prefab.name}' has no RhythmArrow component.", prefab);
                 Destroy(instance);
                 continue;
             }
 
-            // This will now use the dynamically scaled travelTimeSeconds
             double spawnTime = prompt.TargetSongTime - travelTimeSeconds;
             arrow.Setup(prompt, musicClock, spawnTime, spawnPos, hitPos);
 
             activeArrows.Add(arrow);
         }
+
+        if (activeArrows.Count > 0 && greenStars != null)
+        {
+            greenStars.SetActive(true);
+        }
     }
+
     private Vector3 GetPos(Transform t)
     {
         if (t is RectTransform rt)
@@ -140,16 +143,17 @@ public class RhythmLaneUI : MonoBehaviour
             activeArrows.Remove(match);
         }
 
+        if (activeArrows.Count == 0 && greenStars != null)
+        {
+            greenStars.SetActive(false);
+        }
+
         SpawnFeedback(prompt.CurrentResult);
     }
 
     private void SpawnFeedback(AnswerPrompt.Result result)
     {
-        if (feedbackTextPrefab == null || hitLine == null)
-        {
-            Debug.LogWarning($"{nameof(RhythmLaneUI)}: feedback text or hitLine missing.", this);
-            return;
-        }
+        if (feedbackTextPrefab == null || hitLine == null) return;
 
         string message;
         Color color;
@@ -162,42 +166,33 @@ public class RhythmLaneUI : MonoBehaviour
                 color = onBeatColor;
                 clipToPlay = onBeatSound;
                 break;
-
             case AnswerPrompt.Result.Wrong:
                 message = wrongMessage;
                 color = wrongColor;
                 clipToPlay = wrongSound;
                 break;
-
             case AnswerPrompt.Result.Late:
                 message = lateMessage;
                 color = lateColor;
                 clipToPlay = lateSound;
                 break;
-
             case AnswerPrompt.Result.Early:
                 message = earlyMessage;
                 color = earlyColor;
                 clipToPlay = earlySound;
                 break;
-
             default:
                 return;
         }
 
-        // Play the matched sound
         if (audioSource != null && clipToPlay != null)
         {
             audioSource.PlayOneShot(clipToPlay);
         }
 
-        // Spawn the 3D TextMesh directly.
         TextMeshPro popup = Instantiate(feedbackTextPrefab);
-
         popup.text = message;
         popup.color = color;
-
-        // Spawn it at the hit line.
         popup.transform.position = laneParent.position;
 
         StartCoroutine(RiseAndFade(popup));
@@ -211,18 +206,9 @@ public class RhythmLaneUI : MonoBehaviour
         while (elapsed < feedbackLifetime)
         {
             elapsed += Time.deltaTime;
-
             popup.transform.position += Vector3.up * feedbackRiseSpeed * Time.deltaTime;
-
             float alpha = Mathf.Lerp(1f, 0f, elapsed / feedbackLifetime);
-
-            popup.color = new Color(
-                startColor.r,
-                startColor.g,
-                startColor.b,
-                alpha
-            );
-
+            popup.color = new Color(startColor.r, startColor.g, startColor.b, alpha);
             yield return null;
         }
 
