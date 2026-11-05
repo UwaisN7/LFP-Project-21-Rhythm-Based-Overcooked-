@@ -73,7 +73,7 @@ public class ChoppingBoard : MonoBehaviour, IInteractable
         Unsubscribe();
         ReplaceWithChoppedIngredient();
     }
-private void HandleConfirm()
+    private void HandleConfirm()
     {
         if (!waitingForStart) return;
         if (ingredient == null) return;
@@ -81,11 +81,17 @@ private void HandleConfirm()
         waitingForStart = false;
         UnsubscribeConfirm();
 
-        
         rhythmSession.OnSequenceSucceeded -= HandleSequenceSucceeded;
         rhythmSession.OnSequenceFailed -= HandleSequenceFailed;
         rhythmSession.OnSequenceSucceeded += HandleSequenceSucceeded;
         rhythmSession.OnSequenceFailed += HandleSequenceFailed;
+
+        // THE CLEAN WAY: Read the ingredient and set the public variable
+        Ingredient ingScript = ingredient.GetComponent<Ingredient>();
+        if (ingScript != null)
+        {
+            rhythmSession.debugPatternLength = ingScript.RequiredPatternLength;
+        }
 
         rhythmSession.StartSession();
     }

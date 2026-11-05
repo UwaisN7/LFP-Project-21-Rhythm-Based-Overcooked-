@@ -1,5 +1,8 @@
+using System;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Users;
 
 public class PlayerManager : MonoBehaviour
 {
@@ -10,48 +13,135 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] private PlayerRhythmSession session1;
     [SerializeField] private PlayerRhythmSession session2;
 
+    [Header("UI Icons")]
+    [SerializeField] private Image player1Icon;
+    [SerializeField] private Image player2Icon;
+
     public float player1FinalScore;
     public float player2FinalScore;
 
-    private void Start()
+    [Header("UI Events (FIFA Menu Skeleton)")]
+    public Action<Gamepad> OnControllerConnected;
+    public Action<Gamepad> OnControllerDisconnected;
+
+    private Gamepad pad1;
+    private Gamepad pad2;
+
+    private Gamepad simulatedGamepad;
+    private void OnEnable()
     {
-        AssignPlayers();
+        if (player1 != null) player1.neverAutoSwitchControlSchemes = true;
+        if (player2 != null) player2.neverAutoSwitchControlSchemes = true;
+
+        InputSystem.onDeviceChange += HandleDeviceChange;
+
+        foreach (var gamepad in Gamepad.all)
+        {
+            ConnectDevice(gamepad);
+        }
     }
 
-    private void AssignPlayers()
+    private void OnDisable()
     {
-        if (Gamepad.all.Count < 2)
+        InputSystem.onDeviceChange -= HandleDeviceChange;
+    }
+    private void Update()
+    {
+        // Press 'C' to simulate connecting a controller
+        if (Keyboard.current.cKey.wasPressedThisFrame && simulatedGamepad == null)
         {
-            Debug.LogWarning("Two gamepads are required.");
-            return;
+            simulatedGamepad = InputSystem.AddDevice<Gamepad>();
         }
 
-        AssignGamepad(player1, Gamepad.all[0]);
-        AssignGamepad(player2, Gamepad.all[1]);
-        session1?.SetGamepad(Gamepad.all[0]);
-        session2?.SetGamepad(Gamepad.all[1]);
+        // Press 'D' to simulate disconnecting the controller
+        if (Keyboard.current.dKey.wasPressedThisFrame && simulatedGamepad != null)
+        {
+            InputSystem.RemoveDevice(simulatedGamepad);
+            simulatedGamepad = null;
+        }
+    }
+    private void HandleDeviceChange(InputDevice device, InputDeviceChange change)
+    {
+        if (device is not Gamepad gamepad) return;
+
+        switch (change)
+        {
+            case InputDeviceChange.Added:
+            case InputDeviceChange.Reconnected:
+                ConnectDevice(gamepad);
+                break;
+            case InputDeviceChange.Disconnected:
+            case InputDeviceChange.Removed:
+                DisconnectDevice(gamepad);
+                break;
+        }
     }
 
-    private void AssignGamepad(PlayerInput player, Gamepad gamepad)
+    private void ConnectDevice(Gamepad gamepad)
     {
-        if (player == null)
+        OnControllerConnected?.Invoke(gamepad);
+
+        if (pad1 == null && pad2 != gamepad)
         {
-            Debug.LogError("PlayerInput reference is missing.");
-            return;
+            pad1 = gamepad;
+            if (player1Icon != null) player1Icon.color = Color.green;
+            AssignGamepad(player1, session1, pad1);
         }
-
-        if (gamepad == null)
+        else if (pad2 == null && pad1 != gamepad)
         {
-            Debug.LogError("Gamepad reference is missing.");
-            return;
+            pad2 = gamepad;
+            if (player2Icon != null) player2Icon.color = Color.green;
+            AssignGamepad(player2, session2, pad2);
         }
-
-        player.SwitchCurrentControlScheme(gamepad);
-
-        Debug.Log(
-            $"{player.name} assigned to {gamepad.displayName}"
-        );
     }
 
-    
+    private void DisconnectDevice(Gamepad gamepad)
+    {
+        OnControllerDisconnected?.Invoke(gamepad);
+
+        if (pad1 == gamepad)
+        {
+            pad1 = null;
+            if (player1Icon != null) player1Icon.color = Color.red;
+            ClearGamepad(player1, session1);
+        }
+        else if (pad2 == gamepad)
+        {
+            pad2 = null;
+            if (player2Icon != null) player2Icon.color = Color.red;
+            ClearGamepad(player2, session2);
+        }
+    }
+
+    private void AssignGamepad(PlayerInput player, PlayerRhythmSession session, Gamepad gamepad)
+    {
+        if (player != null && gamepad != null)
+        {
+            player.user.UnpairDevices();
+            InputUser.PerformPairingWithDevice(gamepad, player.user);
+            player.SwitchCurrentControlScheme(gamepad);
+
+            Debug.Log($"{player.name} strictly locked to {gamepad.displayName}");
+        }
+
+        if (session != null)
+        {
+            session.SetGamepad(gamepad);
+        }
+    }
+
+    private void ClearGamepad(PlayerInput player, PlayerRhythmSession session)
+    {
+        Debug.LogWarning($"{player?.name ?? "A player"} lost their controller!");
+
+        if (player != null)
+        {
+            player.user.UnpairDevices();
+        }
+
+        if (session != null)
+        {
+            session.SetGamepad(null);
+        }
+    }
 }

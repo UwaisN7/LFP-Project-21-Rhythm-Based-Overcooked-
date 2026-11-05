@@ -9641,6 +9641,7 @@ MonoBehaviour:
   ingredientType: 0
   ingredientState: 0
   choppedVersion: {fileID: 8326348862797068176, guid: 61dcc972721849a46931368172101d6a, type: 3}
+  requiredPatternLength: 5
 --- !u!65 &378707769327902536
 BoxCollider:
   m_ObjectHideFlags: 0

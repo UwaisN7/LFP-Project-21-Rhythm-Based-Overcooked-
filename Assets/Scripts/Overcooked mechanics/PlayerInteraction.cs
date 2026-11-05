@@ -1,7 +1,8 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-public class PlayerInteraction : MonoBehaviour
+// --- MODIFIED: Added IInteractable so players can interact with each other ---
+public class PlayerInteraction : MonoBehaviour, IInteractable
 {
     [SerializeField] private Transform holdPoint;
 
@@ -10,19 +11,129 @@ public class PlayerInteraction : MonoBehaviour
 
     public bool IsHolding => heldObject != null;
     public int PlayerId;
-   
-
-    //private static int nextPlayerId = 0;
 
     private Outline currentOutline;
 
+    // --- NEW: STEAL MECHANIC ADDITIONS ---
+    private PlayerMovement playerMovement;
+    private PlayerRhythmSession rhythmSession;
+    private float stealCooldown = 0f;
+    private PlayerInteraction currentStealOpponent;
+    private bool isInStealBattle = false;
+    // -------------------------------------
 
     private void Awake()
     {
-        //PlayerId = nextPlayerId++;
         Debug.Log($"[PlayerInteraction] PlayerId set to {PlayerId}");
+
+        // --- NEW: STEAL MECHANIC ADDITIONS ---
+        playerMovement = GetComponent<PlayerMovement>();
+        rhythmSession = GetComponent<PlayerRhythmSession>();
+        // -------------------------------------
     }
-    
+
+    // --- NEW: STEAL MECHANIC ADDITIONS ---
+    private void OnEnable()
+    {
+        if (rhythmSession != null)
+        {
+            rhythmSession.OnSequenceSucceeded += HandleStealWin;
+            rhythmSession.OnSequenceFailed += HandleStealLoss;
+        }
+    }
+
+    private void OnDisable()
+    {
+        if (rhythmSession != null)
+        {
+            rhythmSession.OnSequenceSucceeded -= HandleStealWin;
+            rhythmSession.OnSequenceFailed -= HandleStealLoss;
+        }
+    }
+
+    private void Update()
+    {
+        if (stealCooldown > 0f)
+        {
+            stealCooldown -= Time.deltaTime;
+        }
+    }
+
+    // This makes the player an interactable target for other players!
+    public void Interact(PlayerInteraction interactor)
+    {
+        // If I am holding something, the interactor isn't, and neither is on cooldown
+        if (IsHolding && !interactor.IsHolding && stealCooldown <= 0f && interactor.stealCooldown <= 0f)
+        {
+            InitiateStealBattle(interactor);
+        }
+    }
+
+    private void InitiateStealBattle(PlayerInteraction opponent)
+    {
+        Debug.Log($"Player {opponent.PlayerId} is attempting to steal from Player {PlayerId}!");
+
+        isInStealBattle = true;
+        opponent.isInStealBattle = true;
+        currentStealOpponent = opponent;
+        opponent.currentStealOpponent = this;
+
+        // Freeze both players
+        playerMovement?.FreezeMovement(true);
+        opponent.playerMovement?.FreezeMovement(true);
+
+        // Start 10-pattern rhythm session for both
+        rhythmSession?.StartStealSession();
+        opponent.rhythmSession?.StartStealSession();
+    }
+
+    private void HandleStealWin()
+    {
+        if (!isInStealBattle) return; // Ignore if this was a normal cooking rhythm win
+
+        Debug.Log($"Player {PlayerId} WON the steal battle!");
+        EndStealBattle(this, currentStealOpponent);
+    }
+
+    private void HandleStealLoss()
+    {
+        if (!isInStealBattle) return; // Ignore normal failures
+
+        Debug.Log($"Player {PlayerId} LOST the steal battle!");
+        // If I lost, the opponent wins
+        EndStealBattle(currentStealOpponent, this);
+    }
+
+    private void EndStealBattle(PlayerInteraction winner, PlayerInteraction loser)
+    {
+        if (winner == null || loser == null) return;
+
+        // Transfer the item to the winner
+        if (loser.IsHolding)
+        {
+            GameObject stolenItem = loser.RemoveHeldObject();
+            winner.Pickup(stolenItem);
+        }
+
+        // Apply knockback to the loser (pushes them away from the winner)
+        loser.playerMovement?.PushAway(winner.transform.position, 4f);
+
+        // Reset states, apply 5 second cooldown, unfreeze
+        winner.ResetFromStealBattle();
+        loser.ResetFromStealBattle();
+    }
+
+    private void ResetFromStealBattle()
+    {
+        isInStealBattle = false;
+        currentStealOpponent = null;
+        stealCooldown = 5f; // 5 Second Cooldown!
+
+        playerMovement?.FreezeMovement(false);
+        rhythmSession?.ForceCancelSession(); // Force cancel in case the other finished first
+    }
+    // -------------------------------------
+
     public GameObject HeldObject
     {
         get { return heldObject; }
@@ -46,8 +157,14 @@ public class PlayerInteraction : MonoBehaviour
             }
         }
 
-        // If we're holding something and there's no station to interact with,
-        // drop it.
+        // --- MODIFIED: Ensure we check if the currentInteractable is another player first before dropping ---
+        if (heldObject == null && currentInteractable != null)
+        {
+            currentInteractable.Interact(this);
+            return;
+        }
+
+        // If we're holding something and there's no station (or player) to interact with, drop it.
         if (heldObject != null)
         {
             Drop();
@@ -63,7 +180,6 @@ public class PlayerInteraction : MonoBehaviour
 
     public void SetInteractable(IInteractable newInteractable)
     {
-        // Turn off previous outline
         if (currentOutline != null)
         {
             currentOutline.enabled = false;
@@ -72,17 +188,13 @@ public class PlayerInteraction : MonoBehaviour
 
         currentInteractable = newInteractable;
 
-        // Turn on new outline
         if (currentInteractable != null)
         {
-            MonoBehaviour interactableObject =
-                currentInteractable as MonoBehaviour;
+            MonoBehaviour interactableObject = currentInteractable as MonoBehaviour;
 
             if (interactableObject != null)
             {
-                currentOutline =
-                    interactableObject.GetComponentInParent<Outline>();
-
+                currentOutline = interactableObject.GetComponentInParent<Outline>();
                 if (currentOutline != null)
                 {
                     currentOutline.enabled = true;
@@ -94,44 +206,31 @@ public class PlayerInteraction : MonoBehaviour
     public void Pickup(GameObject objectToPickup)
     {
         heldObject = objectToPickup;
-
         objectToPickup.transform.SetParent(holdPoint);
         objectToPickup.transform.localPosition = Vector3.zero;
-        //objectToPickup.transform.localRotation = Quaternion.identity;
     }
 
     public GameObject PlaceHeldObject(Transform placementPoint)
     {
-        if (heldObject == null)
-            return null;
-
+        if (heldObject == null) return null;
         GameObject objectToPlace = heldObject;
-
         heldObject = null;
-
         objectToPlace.transform.SetParent(placementPoint);
         objectToPlace.transform.localPosition = Vector3.zero;
-        //objectToPlace.transform.localRotation = Quaternion.identity;
-
         return objectToPlace;
     }
 
     private void Drop()
     {
         heldObject.transform.SetParent(null);
-
-        heldObject.transform.position =
-            transform.position + transform.forward;
-
+        heldObject.transform.position = transform.position + transform.forward;
         heldObject = null;
     }
 
     public GameObject RemoveHeldObject()
     {
         GameObject objectToRemove = heldObject;
-
         heldObject = null;
-
         return objectToRemove;
     }
 }

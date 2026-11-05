@@ -9,8 +9,6 @@ public class RhythmLaneUI : MonoBehaviour
     [Header("Refs")]
     [SerializeField] private MusicClock musicClock;
     [SerializeField] private RhythmEvaluator evaluator;
-
-    [Tooltip("Optional parent for spawned arrows. If null, arrows are spawned at the scene root.")]
     [SerializeField] private Transform laneParent;
 
     [Header("Layout (empty transforms)")]
@@ -24,8 +22,7 @@ public class RhythmLaneUI : MonoBehaviour
     [SerializeField] private GameObject leftPrefab;
     [SerializeField] private GameObject rightPrefab;
 
-    [Header("Feedback")]
-    [Tooltip("Prefab with RhythmFeedbackText + TextMeshPro. Spawned at hitLine on resolve.")]
+    [Header("Visual Feedback")]
     [SerializeField] private TextMeshPro feedbackTextPrefab;
     [SerializeField] private string onBeatMessage = "PERFECT!";
     [SerializeField] private string wrongMessage = "WRONG!";
@@ -35,11 +32,36 @@ public class RhythmLaneUI : MonoBehaviour
     [SerializeField] private Color wrongColor = new Color(1f, 0.3f, 0.3f);
     [SerializeField] private Color lateColor = new Color(0.7f, 0.7f, 0.7f);
     [SerializeField] private Color earlyColor = new Color(1f, 0.8f, 0.3f);
+
     [Header("Feedback Animation")]
     [SerializeField] private float feedbackRiseSpeed = 1f;
     [SerializeField] private float feedbackLifetime = 0.9f;
+
+    [Header("Audio Feedback")]
+    [SerializeField] private AudioSource audioSource;
+    [SerializeField] private AudioClip onBeatSound;
+    [SerializeField] private AudioClip wrongSound;
+    [SerializeField] private AudioClip lateSound;
+    [SerializeField] private AudioClip earlySound;
+
+    [Header("Dynamic Overdrive")]
+    [SerializeField] private PointManager pointManager;
+    [SerializeField] private int playerId = 0;
+    [SerializeField] private float baseTravelTimeSeconds = 1.5f;
+
+    [Header("Decorations")]
+    [SerializeField] private GameObject greenStars;
+
     private readonly List<RhythmArrow> activeArrows = new List<RhythmArrow>();
-   
+
+    private void Start()
+    {
+        if (greenStars != null)
+        {
+            greenStars.SetActive(false);
+        }
+    }
+
     private void OnEnable()
     {
         if (evaluator != null)
@@ -58,9 +80,12 @@ public class RhythmLaneUI : MonoBehaviour
 
         if (musicClock == null || spawnPoint == null || hitLine == null)
         {
-            Debug.LogError($"{nameof(RhythmLaneUI)}: missing musicClock / spawnPoint / hitLine.", this);
             return;
         }
+
+        int currentMultiplier = pointManager != null ? pointManager.GetComboMultiplier(playerId) : 1;
+        float speedScale = Mathf.Clamp(currentMultiplier, 1f, 4f);
+        travelTimeSeconds = baseTravelTimeSeconds / speedScale;
 
         Vector3 spawnPos = GetPos(spawnPoint);
         Vector3 hitPos = GetPos(hitLine);
@@ -68,16 +93,11 @@ public class RhythmLaneUI : MonoBehaviour
         foreach (AnswerPrompt prompt in prompts)
         {
             GameObject prefab = PrefabFor(prompt.RequiredDirection);
-            if (prefab == null)
-            {
-                Debug.LogError($"{nameof(RhythmLaneUI)}: no prefab for direction {prompt.RequiredDirection}.", this);
-                continue;
-            }
+            if (prefab == null) continue;
 
             GameObject instance = Instantiate(prefab, laneParent);
             if (!instance.TryGetComponent(out RhythmArrow arrow))
             {
-                Debug.LogError($"{nameof(RhythmLaneUI)}: prefab '{prefab.name}' has no RhythmArrow component.", prefab);
                 Destroy(instance);
                 continue;
             }
@@ -86,6 +106,11 @@ public class RhythmLaneUI : MonoBehaviour
             arrow.Setup(prompt, musicClock, spawnTime, spawnPos, hitPos);
 
             activeArrows.Add(arrow);
+        }
+
+        if (activeArrows.Count > 0 && greenStars != null)
+        {
+            greenStars.SetActive(true);
         }
     }
 
@@ -111,7 +136,6 @@ public class RhythmLaneUI : MonoBehaviour
 
     private void HandlePromptResolved(AnswerPrompt prompt)
     {
-        //Debug.Log($"[LaneUI] Prompt resolved: {prompt.CurrentResult}");
         RhythmArrow match = activeArrows.Find(a => a != null && a.Prompt == prompt);
         if (match != null)
         {
@@ -119,58 +143,61 @@ public class RhythmLaneUI : MonoBehaviour
             activeArrows.Remove(match);
         }
 
-        // 2) Spawn the floating feedback text.
+        if (activeArrows.Count == 0 && greenStars != null)
+        {
+            greenStars.SetActive(false);
+        }
+
         SpawnFeedback(prompt.CurrentResult);
     }
 
     private void SpawnFeedback(AnswerPrompt.Result result)
     {
-        if (feedbackTextPrefab == null || hitLine == null)
-        {
-            Debug.LogWarning($"{nameof(RhythmLaneUI)}: feedback text or hitLine missing.", this);
-            return;
-        }
+        if (feedbackTextPrefab == null || hitLine == null) return;
 
         string message;
         Color color;
+        AudioClip clipToPlay = null;
 
         switch (result)
         {
             case AnswerPrompt.Result.OnBeat:
                 message = onBeatMessage;
                 color = onBeatColor;
+                clipToPlay = onBeatSound;
                 break;
-
             case AnswerPrompt.Result.Wrong:
                 message = wrongMessage;
                 color = wrongColor;
+                clipToPlay = wrongSound;
                 break;
-
             case AnswerPrompt.Result.Late:
                 message = lateMessage;
                 color = lateColor;
+                clipToPlay = lateSound;
                 break;
-
             case AnswerPrompt.Result.Early:
                 message = earlyMessage;
                 color = earlyColor;
+                clipToPlay = earlySound;
                 break;
-
             default:
                 return;
         }
 
-        // Spawn the 3D TextMesh directly.
-        TextMeshPro popup = Instantiate(feedbackTextPrefab);
+        if (audioSource != null && clipToPlay != null)
+        {
+            audioSource.PlayOneShot(clipToPlay);
+        }
 
+        TextMeshPro popup = Instantiate(feedbackTextPrefab);
         popup.text = message;
         popup.color = color;
-
-        // Spawn it at the hit line.
         popup.transform.position = laneParent.position;
 
         StartCoroutine(RiseAndFade(popup));
     }
+
     private IEnumerator RiseAndFade(TextMeshPro popup)
     {
         float elapsed = 0f;
@@ -179,18 +206,9 @@ public class RhythmLaneUI : MonoBehaviour
         while (elapsed < feedbackLifetime)
         {
             elapsed += Time.deltaTime;
-
             popup.transform.position += Vector3.up * feedbackRiseSpeed * Time.deltaTime;
-
             float alpha = Mathf.Lerp(1f, 0f, elapsed / feedbackLifetime);
-
-            popup.color = new Color(
-                startColor.r,
-                startColor.g,
-                startColor.b,
-                alpha
-            );
-
+            popup.color = new Color(startColor.r, startColor.g, startColor.b, alpha);
             yield return null;
         }
 
