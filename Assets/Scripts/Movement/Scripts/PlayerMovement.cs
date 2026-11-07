@@ -66,6 +66,13 @@ public class PlayerMovement : MonoBehaviour
         // Instantly pushes the player away from the source position
         Vector3 pushDir = (transform.position - sourcePosition).normalized;
         pushDir.y = 0; // Keep push horizontal
+
+        // If they are exactly on top of each other, push them backward
+        if (pushDir == Vector3.zero)
+        {
+            pushDir = -transform.forward;
+        }
+
         controller.Move(pushDir * pushForce);
     }
     // -------------------------------------
