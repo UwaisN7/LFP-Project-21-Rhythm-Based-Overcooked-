@@ -16,7 +16,7 @@ public class MenuManager : MonoBehaviour
     [Header("Buttons")]
     [SerializeField] private Button playButton;        
     [SerializeField] private Button resumeButton;      
-    [SerializeField] private Button controlsButton;
+   
     [SerializeField] private Button exitButton;
     [SerializeField] private Button controlsBackButton;
 
@@ -31,7 +31,7 @@ public class MenuManager : MonoBehaviour
     {
         playButton.onClick.AddListener(Play);
         resumeButton.onClick.AddListener(Resume);
-        controlsButton.onClick.AddListener(OpenControls);
+     
         controlsBackButton.onClick.AddListener(CloseControls);
         exitButton.onClick.AddListener(ExitGame);
     }
@@ -135,5 +135,18 @@ public class MenuManager : MonoBehaviour
 #else
         return Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.JoystickButton7);
 #endif
+    }
+    private void ResetTimeAndCursor()
+    {
+        Time.timeScale = 1f;
+        AudioListener.pause = false;
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
+    }
+    public void loadTut()
+    {
+        ResetTimeAndCursor();
+        SceneManager.LoadScene(2);
+        state = State.Playing;
     }
 }
