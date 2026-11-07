@@ -1165,6 +1165,34 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4280462963614197382, guid: ef523d238c2238c4291ff93eafba0541, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4280462963614197382, guid: ef523d238c2238c4291ff93eafba0541, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4280462963614197382, guid: ef523d238c2238c4291ff93eafba0541, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 2035058013}
+    - target: {fileID: 4280462963614197382, guid: ef523d238c2238c4291ff93eafba0541, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4280462963614197382, guid: ef523d238c2238c4291ff93eafba0541, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: loadTut
+      objectReference: {fileID: 0}
+    - target: {fileID: 4280462963614197382, guid: ef523d238c2238c4291ff93eafba0541, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: MenuManager, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 4280462963614197382, guid: ef523d238c2238c4291ff93eafba0541, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 4386532967376824671, guid: ef523d238c2238c4291ff93eafba0541, type: 3}
       propertyPath: m_LocalScale.x
       value: 2.2962
@@ -1232,6 +1260,10 @@ PrefabInstance:
     - target: {fileID: 5067159886556346636, guid: ef523d238c2238c4291ff93eafba0541, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 59.704
+      objectReference: {fileID: 0}
+    - target: {fileID: 5467701534082897914, guid: ef523d238c2238c4291ff93eafba0541, type: 3}
+      propertyPath: m_text
+      value: How to play
       objectReference: {fileID: 0}
     - target: {fileID: 7401608189992791216, guid: ef523d238c2238c4291ff93eafba0541, type: 3}
       propertyPath: m_Pivot.x
@@ -1442,22 +1474,10 @@ MonoBehaviour:
   controlsPanel: {fileID: 1944285180}
   playButton: {fileID: 868269089}
   resumeButton: {fileID: 2079698475}
-  controlsButton: {fileID: 2055220162}
   exitButton: {fileID: 1044999513}
   controlsBackButton: {fileID: 1847083300}
   titleText: {fileID: 0}
   showMenuOnStart: 1
---- !u!114 &2055220162 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4280462963614197382, guid: ef523d238c2238c4291ff93eafba0541, type: 3}
-  m_PrefabInstance: {fileID: 1600508667}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
 --- !u!114 &2079698475 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 707393106493996042, guid: ef523d238c2238c4291ff93eafba0541, type: 3}

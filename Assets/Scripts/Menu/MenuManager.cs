@@ -10,18 +10,18 @@ using UnityEngine.InputSystem;
 public class MenuManager : MonoBehaviour
 {
     [Header("Panels")]
-    [SerializeField] private GameObject menuPanel;      
-    [SerializeField] private GameObject controlsPanel; 
+    [SerializeField] private GameObject menuPanel;
+    [SerializeField] private GameObject controlsPanel;
 
     [Header("Buttons")]
-    [SerializeField] private Button playButton;        
-    [SerializeField] private Button resumeButton;      
-    [SerializeField] private Button controlsButton;
+    [SerializeField] private Button playButton;
+    [SerializeField] private Button resumeButton;
+   
     [SerializeField] private Button exitButton;
     [SerializeField] private Button controlsBackButton;
 
     [Header("Optional")]
-    [SerializeField] private Text titleText;          
+    [SerializeField] private Text titleText;
     [SerializeField] private bool showMenuOnStart = true;
 
     private enum State { StartMenu, Playing, Paused }
@@ -31,22 +31,31 @@ public class MenuManager : MonoBehaviour
     {
         playButton.onClick.AddListener(Play);
         resumeButton.onClick.AddListener(Resume);
-        controlsButton.onClick.AddListener(OpenControls);
+      
         controlsBackButton.onClick.AddListener(CloseControls);
         exitButton.onClick.AddListener(ExitGame);
     }
 
     private void Start()
     {
+        // FIX: always start clean, so a scene loaded while paused never stays frozen.
+        ResetTimeAndCursor();
+
         if (showMenuOnStart) ShowStartMenu();
         else StartPlaying();
+    }
+
+    private void OnDestroy()
+    {
+        // FIX: safety net — never leave the game frozen after this object dies.
+        ResetTimeAndCursor();
     }
 
     private void Update()
     {
         if (!PausePressed()) return;
 
-        if (controlsPanel.activeSelf)         
+        if (controlsPanel.activeSelf)
             CloseControls();
         else if (state == State.Playing)
             Pause();
@@ -65,7 +74,8 @@ public class MenuManager : MonoBehaviour
 
     private void StartPlaying()
     {
-        SetGameFrozen(false);
+        // FIX: unfreeze before loading so the new scene's Update() actually runs.
+        ResetTimeAndCursor();
         SceneManager.LoadScene(1);
         state = State.Playing;
     }
@@ -77,7 +87,14 @@ public class MenuManager : MonoBehaviour
         ShowMenu("PAUSED", showPlay: false);
     }
 
-    public void Resume() => StartPlaying();
+    // FIX: Resume must NOT reload the scene. Just unfreeze.
+    public void Resume()
+    {
+        ResetTimeAndCursor();
+        state = State.Playing;
+        if (menuPanel) menuPanel.SetActive(false);
+        if (controlsPanel) controlsPanel.SetActive(false);
+    }
 
     private void OpenControls()
     {
@@ -88,13 +105,13 @@ public class MenuManager : MonoBehaviour
 
     private void CloseControls()
     {
-        controlsPanel.SetActive(false);
-        menuPanel.SetActive(true);
-        Select(state == State.StartMenu ? playButton.gameObject : resumeButton.gameObject);
+        // FIX: unfreeze before loading the tut scene, otherwise it loads frozen.
+        loadTut();
     }
 
     private void ExitGame()
     {
+        ResetTimeAndCursor();
 #if UNITY_EDITOR
         UnityEditor.EditorApplication.isPlaying = false;
 #else
@@ -120,12 +137,22 @@ public class MenuManager : MonoBehaviour
         Cursor.lockState = frozen ? CursorLockMode.None : CursorLockMode.Locked;
     }
 
+    // FIX: one guaranteed "clean state" helper.
+    private void ResetTimeAndCursor()
+    {
+        Time.timeScale = 1f;
+        AudioListener.pause = false;
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
+    }
+
     private void Select(GameObject go)
     {
         if (EventSystem.current == null) return;
         EventSystem.current.SetSelectedGameObject(null);
         EventSystem.current.SetSelectedGameObject(go);
     }
+
     private bool PausePressed()
     {
 #if ENABLE_INPUT_SYSTEM
@@ -135,5 +162,12 @@ public class MenuManager : MonoBehaviour
 #else
         return Input.GetKeyDown(KeyCode.Escape) || Input.GetKeyDown(KeyCode.JoystickButton7);
 #endif
+    }
+
+    public void loadTut()
+    {
+        // FIX: unfreeze BEFORE loading, so the tut scene runs normally.
+        ResetTimeAndCursor();
+        SceneManager.LoadScene(2);
     }
 }
