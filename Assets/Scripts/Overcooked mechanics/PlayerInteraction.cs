@@ -131,6 +131,10 @@ public class PlayerInteraction : MonoBehaviour, IInteractable
 
         playerMovement?.FreezeMovement(false);
         rhythmSession?.ForceCancelSession(); // Force cancel in case the other finished first
+
+        // --- NEW: Nuke the remaining rhythm logic and arrows ---
+        GetComponentInChildren<RhythmEvaluator>()?.NukeSession();
+        GetComponentInChildren<RhythmLaneUI>()?.NukeSession();
     }
     // -------------------------------------
 

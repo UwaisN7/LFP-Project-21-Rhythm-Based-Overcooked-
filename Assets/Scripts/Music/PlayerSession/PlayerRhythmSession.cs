@@ -141,5 +141,12 @@ public class PlayerRhythmSession : MonoBehaviour
     public void SetGamepad(Gamepad pad)
     {
         targetGamepad = pad;
+
+        // Pass the gamepad assignment down to the Input Manager
+        RhythmInputManager inputManager = GetComponent<RhythmInputManager>();
+        if (inputManager != null)
+        {
+            inputManager.SetGamepad(pad);
+        }
     }
 }
