@@ -8893,7 +8893,6 @@ MonoBehaviour:
   controlsPanel: {fileID: 1179051784}
   playButton: {fileID: 1906114089}
   resumeButton: {fileID: 1589892530}
-  controlsButton: {fileID: 1697430551}
   exitButton: {fileID: 2101990042}
   controlsBackButton: {fileID: 1700537250}
   titleText: {fileID: 0}
@@ -17043,17 +17042,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1689337466}
   m_CullTransparentMesh: 1
---- !u!114 &1697430551 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4280462963614197382, guid: ef523d238c2238c4291ff93eafba0541, type: 3}
-  m_PrefabInstance: {fileID: 8332154955921069365}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Button
 --- !u!4 &1699624952 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2876749600198779442, guid: 14b1b75e157b4e744aa7d8733dbffbb5, type: 3}
@@ -18710,6 +18698,7 @@ GameObject:
   - component: {fileID: 1891216220}
   - component: {fileID: 1891216221}
   - component: {fileID: 1891216222}
+  - component: {fileID: 1891216223}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -18774,6 +18763,26 @@ MonoBehaviour:
   countdownStepDuration: 1
   riseDistance: 150
   countdownFontSize: 200
+--- !u!114 &1891216223
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1891216218}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a582c5cfeeb97574dab652a4bcad4fbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RecipeManager
+  recipes:
+  - {fileID: 11400000, guid: 1e9400c81ad049546a7a458298ba7a18, type: 2}
+  - {fileID: 11400000, guid: 1fd5d0731c564d548b70737e5471a081, type: 2}
+  - {fileID: 11400000, guid: 6a82bf3dcaa254e469db24598979c998, type: 2}
+  - {fileID: 11400000, guid: 7f9a86209362c1c4b9139325cceb3533, type: 2}
+  - {fileID: 11400000, guid: c4456e4822ff3ca418635a48897cb93a, type: 2}
+  - {fileID: 11400000, guid: 9da89e1165e971b4d9da4cc9d586b0ff, type: 2}
+  failedPizzaPrefab: {fileID: 1980653982530873647, guid: 0a82ed6f3b3d89547a08dadd320f7901, type: 3}
 --- !u!4 &1902038598 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1806077492188692222, guid: 71fdf272be223b34e9ba1bbd70e18fa7, type: 3}
@@ -19578,6 +19587,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1985282012}
     m_Modifications:
+    - target: {fileID: 1258190908947934857, guid: 14b1b75e157b4e744aa7d8733dbffbb5, type: 3}
+      propertyPath: recipeManager
+      value: 
+      objectReference: {fileID: 1891216223}
     - target: {fileID: 2289459099359734288, guid: 14b1b75e157b4e744aa7d8733dbffbb5, type: 3}
       propertyPath: m_Mesh
       value: 
@@ -20971,6 +20984,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1985282012}
     m_Modifications:
+    - target: {fileID: 1258190908947934857, guid: 14b1b75e157b4e744aa7d8733dbffbb5, type: 3}
+      propertyPath: recipeManager
+      value: 
+      objectReference: {fileID: 1891216223}
     - target: {fileID: 2289459099359734288, guid: 14b1b75e157b4e744aa7d8733dbffbb5, type: 3}
       propertyPath: m_Mesh
       value: 

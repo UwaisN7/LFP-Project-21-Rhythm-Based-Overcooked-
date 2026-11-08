@@ -345,6 +345,7 @@ GameObject:
   - component: {fileID: 4165171190125400601}
   - component: {fileID: 3690043363092440084}
   - component: {fileID: 196341205741096029}
+  - component: {fileID: -8046763944679796927}
   m_Layer: 0
   m_Name: Feta
   m_TagString: Untagged
@@ -432,3 +433,21 @@ MonoBehaviour:
   ingredientState: 0
   choppedVersion: {fileID: 1219127741176884038, guid: a9d99dcdb6d30df41aa75876532fffd0, type: 3}
   requiredPatternLength: 4
+--- !u!114 &-8046763944679796927
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6152366411330241892}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Outline
+  outlineMode: 0
+  outlineColor: {r: 1, g: 1, b: 1, a: 1}
+  outlineWidth: 2
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []

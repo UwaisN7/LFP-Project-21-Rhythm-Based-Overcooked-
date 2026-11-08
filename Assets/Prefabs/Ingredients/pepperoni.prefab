@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 2784919941646803822}
   - component: {fileID: 7008343669484471816}
   - component: {fileID: 1577714506545951293}
+  - component: {fileID: -8070929519395567841}
   m_Layer: 0
   m_Name: pepperoni
   m_TagString: Untagged
@@ -99,6 +100,24 @@ MonoBehaviour:
   ingredientState: 0
   choppedVersion: {fileID: 1371176254623577038, guid: fb3fd9fcad26e9b4c9cc95a5ae00842c, type: 3}
   requiredPatternLength: 4
+--- !u!114 &-8070929519395567841
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1998087954630984189}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Outline
+  outlineMode: 0
+  outlineColor: {r: 1, g: 1, b: 1, a: 1}
+  outlineWidth: 2
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
 --- !u!1 &8866305076014391954
 GameObject:
   m_ObjectHideFlags: 0

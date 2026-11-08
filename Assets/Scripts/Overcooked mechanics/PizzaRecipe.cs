@@ -10,4 +10,6 @@ public class PizzaRecipe : ScriptableObject
     public GameObject finishedPizzaPrefab;
 
     public Sprite recipeIcon;
+
+    public int points;
 }

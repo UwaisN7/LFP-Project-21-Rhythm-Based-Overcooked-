@@ -21146,9 +21146,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a99e9d55756dde549b5eaa920daaf550, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Plate
-  tomatoVisual: {fileID: 0}
-  cheeseVisual: {fileID: 0}
-  doughVisual: {fileID: 0}
+  tomatoVisual: {fileID: 4658860452901393509}
+  cheeseVisual: {fileID: 1575315795401974662}
+  doughVisual: {fileID: 3454265289081147872}
+  pineappleVisual: {fileID: 1006411129999338091}
+  hamVisual: {fileID: 7929527332024780321}
+  pepperoniVisual: {fileID: 9071857114572013427}
+  chickenVisual: {fileID: 9191975052323793262}
+  fetaVisual: {fileID: 7899790932328637046}
 --- !u!1 &9138918726184006445
 GameObject:
   m_ObjectHideFlags: 0

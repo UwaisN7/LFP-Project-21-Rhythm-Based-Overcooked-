@@ -16,3 +16,4 @@ MonoBehaviour:
   requiredIngredients: 0000000001000000020000000600000007000000
   finishedPizzaPrefab: {fileID: 2602581428838325688, guid: 8b124b234789ee64385537854e13eab0, type: 3}
   recipeIcon: {fileID: 7482667652216324306, guid: 83d3f97c64717e34cb052d285723a089, type: 3}
+  points: 200
