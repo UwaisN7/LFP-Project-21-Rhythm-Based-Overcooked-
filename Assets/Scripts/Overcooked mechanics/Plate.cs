@@ -1,5 +1,7 @@
 using UnityEngine;
 
+
+
 public class Plate : MonoBehaviour, IInteractable
 {
     [Header("Ingredient Visuals")]

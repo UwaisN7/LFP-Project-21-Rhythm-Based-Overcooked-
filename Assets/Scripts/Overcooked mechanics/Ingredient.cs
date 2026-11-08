@@ -1,6 +1,17 @@
 using UnityEngine;
 
-public enum IngredientType { Tomato, Cheese, Dough }
+public enum IngredientType
+{
+    Dough,
+    Tomato,
+    Cheese,
+    Pineapple,
+    Ham,
+    Pepperoni,
+    Chicken,
+    Feta
+}
+
 public enum IngredientState { Raw, Chopped, burnt }
 
 public class Ingredient : MonoBehaviour, IInteractable

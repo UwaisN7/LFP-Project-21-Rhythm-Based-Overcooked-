@@ -357,7 +357,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d901447b8126284ca4fb7c93497a59e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Ingredient
-  ingredientType: 1
+  ingredientType: 2
   ingredientState: 0
   choppedVersion: {fileID: 1300423279086652427, guid: 93c5a0dff112ef34097621b4caa0cc1d, type: 3}
   requiredPatternLength: 3

@@ -1460,9 +1460,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7d901447b8126284ca4fb7c93497a59e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Ingredient
-  ingredientType: 2
+  ingredientType: 0
   ingredientState: 1
   choppedVersion: {fileID: 5916516703502246321}
+  requiredPatternLength: 4
 --- !u!65 &6038451892781737508
 BoxCollider:
   m_ObjectHideFlags: 0
