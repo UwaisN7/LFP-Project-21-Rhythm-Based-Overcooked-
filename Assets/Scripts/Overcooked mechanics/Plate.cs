@@ -1,14 +1,23 @@
+
+using System.Collections.Generic;
 using UnityEngine;
-
-
 
 public class Plate : MonoBehaviour, IInteractable
 {
     [Header("Ingredient Visuals")]
-    [SerializeField] private GameObject tomatoVisual;
-    [SerializeField] private GameObject cheeseVisual;
-    [SerializeField] private GameObject doughVisual;
-  
+
+    [SerializeField] public GameObject tomatoVisual;
+    [SerializeField] public GameObject cheeseVisual;
+    [SerializeField] public GameObject doughVisual;
+    [SerializeField] public GameObject pineappleVisual;
+    [SerializeField] public GameObject hamVisual;
+    [SerializeField] public GameObject pepperoniVisual;
+    [SerializeField] public GameObject chickenVisual;
+    [SerializeField] public GameObject fetaVisual;
+
+    // Stores all ingredients added to this plate
+    private HashSet<IngredientType> addedIngredients =
+        new HashSet<IngredientType>();
 
     public void Interact(PlayerInteraction player)
     {
@@ -29,36 +38,107 @@ public class Plate : MonoBehaviour, IInteractable
             return;
         }
 
-        // Only chopped ingredients can be added to a plate
+        // Only chopped ingredients can be added
         if (ingredientScript.State != IngredientState.Chopped)
         {
             Debug.Log("This ingredient needs to be chopped first!");
             return;
         }
 
-        switch (ingredientScript.Type)
+        IngredientType type = ingredientScript.Type;
+
+        // Prevent duplicate ingredients
+        if (addedIngredients.Contains(type))
         {
-            case IngredientType.Tomato:
-                tomatoVisual.SetActive(true);
-                break;
-
-            case IngredientType.Cheese:
-                cheeseVisual.SetActive(true);
-                break;
-
-            case IngredientType.Dough:
-                doughVisual.SetActive(true);
-                break;
-
+            Debug.Log("This ingredient is already on the plate!");
+            return;
         }
 
+        // Add ingredient to collection
+        addedIngredients.Add(type);
+
+        // Show corresponding visual
+        SetIngredientVisual(type, true);
+
+        // Remove physical ingredient
         Destroy(ingredient);
     }
 
-    public bool HasAllIngredients()
+    private void SetIngredientVisual(IngredientType type, bool active)
     {
-        return tomatoVisual.activeSelf &&
-               cheeseVisual.activeSelf &&
-               doughVisual.activeSelf;
+        GameObject visual = null;
+
+        switch (type)
+        {
+            case IngredientType.Tomato:
+                visual = tomatoVisual;
+                break;
+
+            case IngredientType.Cheese:
+                visual = cheeseVisual;
+                break;
+
+            case IngredientType.Dough:
+                visual = doughVisual;
+                break;
+
+            case IngredientType.Pineapple:
+                visual = pineappleVisual;
+                break;
+
+            case IngredientType.Ham:
+                visual = hamVisual;
+                break;
+
+            case IngredientType.Pepperoni:
+                visual = pepperoniVisual;
+                break;
+
+            case IngredientType.Chicken:
+                visual = chickenVisual;
+                break;
+
+            case IngredientType.Feta:
+                visual = fetaVisual;
+                break;
+        }
+
+        if (visual != null)
+        {
+            visual.SetActive(active);
+        }
+        else
+        {
+            Debug.LogWarning("No visual assigned for " + type);
+        }
+    }
+
+    // Returns all ingredients currently on the plate
+    public HashSet<IngredientType> GetIngredients()
+    {
+        return new HashSet<IngredientType>(addedIngredients);
+    }
+
+    // Checks whether a specific recipe matches this plate
+    public bool MatchesRecipe(PizzaRecipe recipe)
+    {
+        if (recipe == null)
+            return false;
+
+        if (addedIngredients.Count != recipe.requiredIngredients.Length)
+            return false;
+
+        foreach (IngredientType required in recipe.requiredIngredients)
+        {
+            if (!addedIngredients.Contains(required))
+                return false;
+        }
+
+        return true;
+    }
+
+    public bool HasIngredients()
+    {
+        return addedIngredients.Count > 0;
     }
 }

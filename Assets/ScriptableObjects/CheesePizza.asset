@@ -14,4 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PizzaRecipe
   recipeName: Cheese Pizza
   requiredIngredients: 000000000100000002000000
+  finishedPizzaPrefab: {fileID: 1980653982530873647, guid: f78aae2ad56c98544b2198c08f0b8e02, type: 3}
   recipeIcon: {fileID: 7482667652216324306, guid: 83d3f97c64717e34cb052d285723a089, type: 3}

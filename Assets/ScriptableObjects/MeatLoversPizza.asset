@@ -14,4 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PizzaRecipe
   recipeName: Meat Lovers Pizza
   requiredIngredients: 000000000100000002000000040000000500000006000000
+  finishedPizzaPrefab: {fileID: 1382257126715729959, guid: 30b201b9fc77c4d46b14a865dc2155f2, type: 3}
   recipeIcon: {fileID: 7482667652216324306, guid: 83d3f97c64717e34cb052d285723a089, type: 3}

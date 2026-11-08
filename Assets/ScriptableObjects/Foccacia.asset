@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PizzaRecipe
   recipeName: Foccacia
   requiredIngredients: 0000000007000000
-  finishedPizzaPrefab: {fileID: 0}
+  finishedPizzaPrefab: {fileID: 3667871108380950720, guid: 5d7389488a0c1f64bba62fc60333265b, type: 3}
   recipeIcon: {fileID: 7482667652216324306, guid: 83d3f97c64717e34cb052d285723a089, type: 3}

@@ -14,4 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::PizzaRecipe
   recipeName: Pepperoni Pizza
   requiredIngredients: 00000000010000000200000005000000
+  finishedPizzaPrefab: {fileID: 1693964207041380267, guid: da34a4e628b318742843fa498cb7c913, type: 3}
   recipeIcon: {fileID: 7482667652216324306, guid: 83d3f97c64717e34cb052d285723a089, type: 3}
