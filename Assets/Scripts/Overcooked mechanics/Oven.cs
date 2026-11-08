@@ -24,6 +24,7 @@ public class Oven : MonoBehaviour, IInteractable
     private GameObject plateCooking;
     private GameObject finishedDish;
     private GameObject resultPizzaPrefab;
+    private PizzaRecipe resultRecipe;
 
     private float cookingTimer;
     private bool isCooking;
@@ -70,6 +71,7 @@ public class Oven : MonoBehaviour, IInteractable
             }
 
             // Determine which pizza will be produced
+            resultRecipe = recipeManager.GetMatchingRecipe(plate);
             resultPizzaPrefab = recipeManager.GetPizzaPrefab(plate);
 
             if (resultPizzaPrefab == null)
@@ -249,13 +251,18 @@ public class Oven : MonoBehaviour, IInteractable
         }
 
         // Spawn correct pizza or failed pizza
-        finishedDish = Instantiate(
-            resultPizzaPrefab,
-            dishSpawnPoint.position,
-            resultPizzaPrefab.transform.rotation
-        );
+        FinalDish finalDish = finishedDish.GetComponent<FinalDish>();
 
-        finishedDish.transform.SetParent(transform);
+        if (finalDish != null)
+        {
+            finalDish.SetRecipe(resultRecipe);
+        }
+        else
+        {
+            Debug.LogError("Finished pizza prefab is missing FinalDish!");
+        }
+
         resultPizzaPrefab = null;
+        resultRecipe = null;
     }
 }

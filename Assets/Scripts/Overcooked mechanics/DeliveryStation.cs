@@ -14,6 +14,9 @@ public class DeliveryStation : MonoBehaviour, IInteractable
     [Header("Refs")]
     [SerializeField] private PointManager pointManager;
 
+    [Header("Order System")]
+    [SerializeField] private OrderManager orderManager;
+
     private void Update()
     {
         if (Keyboard.current != null && Keyboard.current.spaceKey.wasPressedThisFrame)
@@ -22,35 +25,49 @@ public class DeliveryStation : MonoBehaviour, IInteractable
         }
     }
 
+ 
     public void Interact(PlayerInteraction player)
     {
-        
         if (!player.IsHolding)
-        {
-            Debug.Log("You need to be holding a finished pizza!");
             return;
-        }
 
-     
         FinalDish finalDish = player.HeldObject.GetComponent<FinalDish>();
 
         if (finalDish == null)
-        {
-            Debug.Log("This is not a finished pizza!");
             return;
+
+        // Check whether this pizza matches an active order
+        if (orderManager != null)
+        {
+            bool matchedOrder = orderManager.TryCompleteOrder(
+                finalDish.Recipe,
+                out int orderPoints
+            );
+
+            if (matchedOrder)
+            {
+                Debug.Log("Order completed! Points available: " + orderPoints);
+            }
+            else
+            {
+                Debug.Log("No matching active order!");
+            }
+        }
+        else
+        {
+            Debug.LogError("OrderManager is not assigned!", this);
         }
 
-       
+        // Remove the delivered pizza
         GameObject deliveredPizza = player.RemoveHeldObject();
 
         if (deliveredPizza != null)
         {
             Destroy(deliveredPizza);
-
-           
             DeliverPizza(player.PlayerId);
         }
     }
+
 
     private void DeliverPizza(int playerId)
     {

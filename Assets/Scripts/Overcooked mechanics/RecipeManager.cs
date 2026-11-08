@@ -9,10 +9,12 @@ public class RecipeManager : MonoBehaviour
     [Header("Failed Pizza")]
     [SerializeField] private GameObject failedPizzaPrefab;
 
-    public GameObject GetPizzaPrefab(Plate plate)
+    public PizzaRecipe[] Recipes => recipes;
+
+    public PizzaRecipe GetMatchingRecipe(Plate plate)
     {
         if (plate == null)
-            return failedPizzaPrefab;
+            return null;
 
         foreach (PizzaRecipe recipe in recipes)
         {
@@ -22,11 +24,21 @@ public class RecipeManager : MonoBehaviour
             if (plate.MatchesRecipe(recipe))
             {
                 Debug.Log("Recipe matched: " + recipe.recipeName);
-                return recipe.finishedPizzaPrefab;
+                return recipe;
             }
         }
 
         Debug.Log("No matching recipe! Failed pizza.");
+        return null;
+    }
+
+    public GameObject GetPizzaPrefab(Plate plate)
+    {
+        PizzaRecipe recipe = GetMatchingRecipe(plate);
+
+        if (recipe != null)
+            return recipe.finishedPizzaPrefab;
+
         return failedPizzaPrefab;
     }
 }
