@@ -35,6 +35,15 @@ public class PointManager : MonoBehaviour
 
     public event System.Action<int, PlayerScore, int> OnScoreChanged;
 
+    [Header("Combo Decay (DMC Style)")]
+    [SerializeField] private float timeBeforeDecayStarts = 1.5f;
+    [SerializeField] private int actionPointsLostPerSecond = 30;
+
+    private Dictionary<int, float> lastActionTimes = new Dictionary<int, float>();
+
+    private Dictionary<int, float> decayAccumulators = new Dictionary<int, float>(); // NEW
+    public event System.Action<int, string> OnActionLogged; // Ultrakill feed event
+
     private PlayerScore GetOrCreate(int playerId)
     {
         if (!scores.TryGetValue(playerId, out var score))
@@ -44,7 +53,50 @@ public class PointManager : MonoBehaviour
         }
         return score;
     }
+    private void Update()
+    {
+        foreach (var kvp in scores)
+        {
+            int pId = kvp.Key;
+            if (!lastActionTimes.ContainsKey(pId)) continue;
 
+            // If the player hasn't done anything in a while, start draining their combo
+            if (Time.time - lastActionTimes[pId] > timeBeforeDecayStarts)
+            {
+                if (kvp.Value.ActionPoints > 0)
+                {
+                    // Ensure the accumulator exists for this player
+                    if (!decayAccumulators.ContainsKey(pId)) decayAccumulators[pId] = 0f;
+
+                    // Accumulate the fractional decay for this frame
+                    decayAccumulators[pId] += actionPointsLostPerSecond * Time.deltaTime;
+
+                    // If we've built up at least 1 full point of decay, subtract it
+                    int pointsToDrop = Mathf.FloorToInt(decayAccumulators[pId]);
+
+                    if (pointsToDrop > 0)
+                    {
+                        kvp.Value.ActionPoints -= pointsToDrop;
+                        decayAccumulators[pId] -= pointsToDrop; // Remove the whole numbers, keep the remainder
+
+                        if (kvp.Value.ActionPoints < 0) kvp.Value.ActionPoints = 0;
+
+                        OnScoreChanged?.Invoke(pId, kvp.Value, GetComboMultiplier(pId));
+                    }
+                }
+                else
+                {
+                    // Reset the accumulator once they hit rock bottom
+                    decayAccumulators[pId] = 0f;
+                }
+            }
+        }
+    }
+
+    public void LogAction(int pId, string actionText)
+    {
+        OnActionLogged?.Invoke(pId, actionText);
+    }
     public int GetComboMultiplier(int playerId)
     {
         var score = GetOrCreate(playerId);
@@ -53,6 +105,7 @@ public class PointManager : MonoBehaviour
 
     public void AddActionPoints(int playerId, int amount)
     {
+        lastActionTimes[playerId] = Time.time;
         var score = GetOrCreate(playerId);
         int previousAP = score.ActionPoints;
         int previousMultiplier = GetComboMultiplier(playerId);
@@ -85,6 +138,7 @@ public class PointManager : MonoBehaviour
 
     public void ReportStrike(int playerId)
     {
+        lastActionTimes[playerId] = Time.time;
         var score = GetOrCreate(playerId);
         int previousAP = score.ActionPoints;
         int previousMultiplier = GetComboMultiplier(playerId);

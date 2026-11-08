@@ -1855,6 +1855,7 @@ MonoBehaviour:
   ingredientType: 0
   ingredientState: 1
   choppedVersion: {fileID: 8326348862797068176}
+  requiredPatternLength: 5
 --- !u!114 &2573810414684126924
 MonoBehaviour:
   m_ObjectHideFlags: 0

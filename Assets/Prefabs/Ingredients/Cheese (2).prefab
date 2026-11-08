@@ -360,6 +360,7 @@ MonoBehaviour:
   ingredientType: 1
   ingredientState: 0
   choppedVersion: {fileID: 1300423279086652427, guid: 93c5a0dff112ef34097621b4caa0cc1d, type: 3}
+  requiredPatternLength: 3
 --- !u!65 &7812871963632534732
 BoxCollider:
   m_ObjectHideFlags: 0

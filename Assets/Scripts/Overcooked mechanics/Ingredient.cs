@@ -1,19 +1,7 @@
 using UnityEngine;
 
-public enum IngredientType
-{
-    Tomato,
-    Cheese,
-    Dough
-}
-
-public enum IngredientState
-{
-    Raw,
-    Chopped,
-
-    burnt
-}
+public enum IngredientType { Tomato, Cheese, Dough }
+public enum IngredientState { Raw, Chopped, burnt }
 
 public class Ingredient : MonoBehaviour, IInteractable
 {
@@ -21,20 +9,13 @@ public class Ingredient : MonoBehaviour, IInteractable
     [SerializeField] private IngredientState ingredientState;
     [SerializeField] private GameObject choppedVersion;
 
-    public IngredientType Type
-    {
-        get { return ingredientType; }
-    }
+    // Set this per prefab in the Inspector (e.g., Tomato = 3, Dough = 5)
+    [SerializeField] private int requiredPatternLength = 4;
 
-    public IngredientState State
-    {
-        get { return ingredientState; }
-    }
-
-    public GameObject ChoppedVersion
-    {
-        get { return choppedVersion; }
-    }
+    public IngredientType Type => ingredientType;
+    public IngredientState State => ingredientState;
+    public GameObject ChoppedVersion => choppedVersion;
+    public int RequiredPatternLength => requiredPatternLength;
 
     public void Interact(PlayerInteraction player)
     {
@@ -43,5 +24,4 @@ public class Ingredient : MonoBehaviour, IInteractable
             player.Pickup(gameObject);
         }
     }
-
 }

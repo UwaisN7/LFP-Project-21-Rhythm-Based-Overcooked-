@@ -11,6 +11,7 @@ public class Oven : MonoBehaviour, IInteractable
     [Header("Final Dish")]
     [SerializeField] private GameObject finalDishPrefab;
     [SerializeField] private Transform dishSpawnPoint;
+
     [Header("Rhythm")]
     [SerializeField] private float successTimeBonus = 10f;
     [SerializeField] private float failTimePenalty = 0f;
@@ -19,42 +20,48 @@ public class Oven : MonoBehaviour, IInteractable
     private bool waitingForConfirm;
     private bool handled;
     private GameObject plateCooking;
+    private GameObject finishedDish;
     private float cookingTimer;
     private bool isCooking;
-
 
     public void Interact(PlayerInteraction player)
     {
         // =========================================
-        // START COOKING
+        // 1. PICK UP FINISHED DISH
         // =========================================
-
-        if (!isCooking)
+        if (finishedDish != null && !player.IsHolding)
         {
-            // Player needs to be holding something
+            GameObject toPickup = finishedDish;
+            finishedDish = null;
+            toPickup.transform.SetParent(null, true);
+            player.Pickup(toPickup);
+            Debug.Log("Finished dish picked up!");
+            return;
+        }
+
+        // =========================================
+        // 2. START COOKING (Arms Rhythm Immediately)
+        // =========================================
+        if (!isCooking && finishedDish == null)
+        {
             if (!player.IsHolding)
                 return;
 
-            // Check if the player is holding a plate
             Plate plate = player.HeldObject.GetComponent<Plate>();
-
             if (plate == null)
             {
                 Debug.Log("You need a plate to cook!");
                 return;
             }
 
-            // Check that all ingredients are on the plate
             if (!plate.HasAllIngredients())
             {
                 Debug.Log("The pizza is missing ingredients!");
                 return;
             }
 
-            // Take the plate from the player's hands
+            // Take plate from player and place in oven
             plateCooking = player.RemoveHeldObject();
-
-            // Put the plate inside the oven
             plateCooking.transform.SetParent(transform);
             plateCooking.transform.localPosition = Vector3.zero;
             plateCooking.transform.localRotation = Quaternion.identity;
@@ -63,73 +70,79 @@ public class Oven : MonoBehaviour, IInteractable
             cookingTimer = cookingTime;
             isCooking = true;
 
-            // Show timer
             if (timerUI != null)
-            {
                 timerUI.SetActive(true);
-            }
 
             if (timerText != null)
-            {
                 timerText.text = Mathf.Ceil(cookingTimer).ToString();
-            }
 
-            Debug.Log("Pizza is cooking!");
-
+            // Arm the rhythm session immediately upon placing (matches CuttingBoard pattern)
+            StartRhythmGame(player.GetComponent<PlayerRhythmSession>());
+            Debug.Log("Pizza is cooking and rhythm is armed!");
             return;
         }
 
-
         // =========================================
-        // RHYTHM SYSTEM
+        // 3. RHYTHM SYSTEM CONFIRMATION
         // =========================================
-
-        if (isCooking)
+        if (isCooking && waitingForConfirm)
         {
+            // If player interacts again while waiting, ensure session is bound to current player
             ArmRhythm(player);
-           
         }
     }
-
 
     private void Update()
     {
         if (!isCooking)
             return;
 
-        // Count down
         cookingTimer -= Time.deltaTime;
 
-        // Update visual timer
         if (timerText != null)
         {
             timerText.text = Mathf.Ceil(cookingTimer).ToString();
         }
 
-        // Finish cooking
         if (cookingTimer <= 0f)
         {
             FinishCooking();
         }
     }
 
-
-    private void ArmRhythm(PlayerInteraction player)
+    private void StartRhythmGame(PlayerRhythmSession session)
     {
-        if (waitingForConfirm) return;
+        rhythmSession = session;
+        handled = false;
 
-        rhythmSession = player.GetComponent<PlayerRhythmSession>();
         if (rhythmSession == null)
         {
-            Debug.LogWarning("Player has no PlayerRhythmSession!");
+            Debug.LogWarning("Player has no PlayerRhythmSession!", this);
             return;
         }
 
         waitingForConfirm = true;
-        handled = false;
 
         rhythmSession.OnConfirmPressed -= HandleConfirm;
         rhythmSession.OnConfirmPressed += HandleConfirm;
+    }
+
+    private void ArmRhythm(PlayerInteraction player)
+    {
+        rhythmSession = player.GetComponent<PlayerRhythmSession>();
+        if (rhythmSession == null)
+        {
+            Debug.LogWarning("Player has no PlayerRhythmSession!", this);
+            return;
+        }
+
+        if (!waitingForConfirm)
+        {
+            waitingForConfirm = true;
+            handled = false;
+            rhythmSession.OnConfirmPressed -= HandleConfirm;
+            rhythmSession.OnConfirmPressed += HandleConfirm;
+        }
     }
 
     private void HandleConfirm()
@@ -157,7 +170,15 @@ public class Oven : MonoBehaviour, IInteractable
         Unsubscribe();
 
         cookingTimer -= successTimeBonus;
-        if (cookingTimer <= 0f) FinishCooking();
+        if (cookingTimer <= 0f)
+        {
+            FinishCooking();
+        }
+        else
+        {
+            // Re-arm for subsequent rhythm checks if needed
+            waitingForConfirm = false;
+        }
     }
 
     private void HandleSequenceFailed()
@@ -167,6 +188,7 @@ public class Oven : MonoBehaviour, IInteractable
         Unsubscribe();
 
         cookingTimer += failTimePenalty;
+        waitingForConfirm = false;
     }
 
     private void Unsubscribe()
@@ -183,13 +205,12 @@ public class Oven : MonoBehaviour, IInteractable
         rhythmSession.OnConfirmPressed -= HandleConfirm;
     }
 
-
     private void FinishCooking()
     {
         isCooking = false;
-        waitingForConfirm = false;  
+        waitingForConfirm = false;
         Unsubscribe();
-        // Hide timer
+
         if (timerUI != null)
         {
             timerUI.SetActive(false);
@@ -204,18 +225,19 @@ public class Oven : MonoBehaviour, IInteractable
             plateCooking = null;
         }
 
-        // Spawn final dish
-        if (finalDishPrefab != null)
+        // Spawn final dish and hold reference for pickup
+        if (finalDishPrefab != null && dishSpawnPoint != null)
         {
-            GameObject finalDish = Instantiate<GameObject>(
+            finishedDish = Instantiate(
                 finalDishPrefab,
                 dishSpawnPoint.position,
                 finalDishPrefab.transform.rotation
             );
+            finishedDish.transform.SetParent(transform);
         }
         else
         {
-            Debug.LogWarning("No final dish prefab assigned!");
+            Debug.LogWarning("No final dish prefab or spawn point assigned!", this);
         }
     }
 }
