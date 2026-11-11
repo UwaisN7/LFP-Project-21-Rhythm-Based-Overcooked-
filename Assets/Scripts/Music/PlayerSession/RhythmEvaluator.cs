@@ -105,7 +105,7 @@ Debug.Log($"[Eval] P{playerId} dir={direction} | press={songTimeOfPress:F4} " +
                 pointManager?.AddActionPoints(playerId, 10);
                 pointManager?.LogAction(playerId, "<color=green>EARLY +10</color>");
                 break;
-                break;
+              
 
             case AnswerPrompt.Result.OnBeat:
                 pointManager?.AddActionPoints(playerId, 50);
@@ -137,6 +137,12 @@ Debug.Log($"[Eval] P{playerId} dir={direction} | press={songTimeOfPress:F4} " +
         if (strikes >= 2)
         {
             OnIngredientBurned?.Invoke();
+            NukeSession(); // Clear the remaining logic immediately
         }
+    }
+
+    public void NukeSession()
+    {
+        activePrompts.Clear();
     }
 }

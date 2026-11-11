@@ -66,12 +66,14 @@ public class RhythmLaneUI : MonoBehaviour
     {
         if (evaluator != null)
             evaluator.OnPromptResolved += HandlePromptResolved;
+        evaluator.OnIngredientBurned += NukeSession;
     }
 
     private void OnDisable()
     {
         if (evaluator != null)
             evaluator.OnPromptResolved -= HandlePromptResolved;
+        evaluator.OnIngredientBurned -= NukeSession;
     }
 
     public void Display(IEnumerable<AnswerPrompt> prompts)
@@ -213,5 +215,24 @@ public class RhythmLaneUI : MonoBehaviour
         }
 
         Destroy(popup.gameObject);
+    }
+    public void NukeSession()
+    {
+        // Destroy all floating arrow gameobjects
+        foreach (RhythmArrow arrow in activeArrows)
+        {
+            if (arrow != null)
+            {
+                Destroy(arrow.gameObject);
+            }
+        }
+
+        activeArrows.Clear();
+
+        // Hide decorations if applicable
+        if (greenStars != null)
+        {
+            greenStars.SetActive(false);
+        }
     }
 }
