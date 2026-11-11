@@ -178,24 +178,36 @@ public class PointManager : MonoBehaviour
         return finalScore;
     }
 
-    public void ApplyFinalScore(int playerId, int orderDifficulty, int timeLeft)
+    public float CalculateFinalScore(int playerId, PizzaRecipe recipe, int timeLeft)
     {
-        float final = CalculateFinalScore(playerId, orderDifficulty, timeLeft);
-        if (playerId == 0) player1FinalScore = final;
-        else if (playerId == 1) player2FinalScore = final;
+        if (recipe == null)
+            return 0f;
 
-        Debug.Log($"[PointManager] Player {playerId} FINAL SCORE: {final} " +
-                  $"(Diff {orderDifficulty} + Time {timeLeft}) * {GetComboMultiplier(playerId)}x = {final}");
+        int multiplier = GetComboMultiplier(playerId);
+
+        float finalScore = (recipe.points + timeLeft) * multiplier;
+
+        return finalScore;
     }
-    public void AddFinalScore(int playerId, float amount)
-    {
-        if (playerId == 0) player1FinalScore += amount;
-        else if (playerId == 1) player2FinalScore += amount;
 
-        if (debugLogging)
-        {
-            float currentTotal = playerId == 0 ? player1FinalScore : player2FinalScore;
-            Debug.Log($"[PointManager] Player {playerId} final score +{amount} | Total: {currentTotal}");
-        }
+    public void ApplyFinalScore(int playerId, PizzaRecipe recipe, int timeLeft)
+    {
+        if (recipe == null)
+            return;
+
+        float final = CalculateFinalScore(playerId, recipe, timeLeft);
+
+        if (playerId == 0)
+            player1FinalScore += final;
+        else if (playerId == 1)
+            player2FinalScore += final;
+
+        Debug.Log(
+            $"[PointManager] Player {playerId} FINAL SCORE: {final} | " +
+            $"Recipe: {recipe.recipeName} | " +
+            $"Recipe Points: {recipe.points} | " +
+            $"Time Left: {timeLeft} | " +
+            $"Multiplier: {GetComboMultiplier(playerId)}x"
+        );
     }
 }

@@ -127,25 +127,31 @@ public class OrderManager : MonoBehaviour
     }
 
     // Called when a pizza is delivered.
-    public bool TryCompleteOrder(PizzaRecipe recipe, out int points)
+    public bool TryCompleteOrder(PizzaRecipe recipe, out int timeLeft)
     {
-        points = 0;
+        timeLeft = 0;
 
         if (recipe == null)
             return false;
 
         for (int i = 0; i < activeOrders.Count; i++)
         {
-            if (activeOrders[i].recipe == recipe)
-            {
-                points = recipe.points;
+            ActiveOrder order = activeOrders[i];
 
-                if (activeOrders[i].card != null)
-                    Destroy(activeOrders[i].card.gameObject);
+            if (order.recipe == recipe)
+            {
+                // Capture remaining time BEFORE removing the order.
+                timeLeft = Mathf.CeilToInt(order.timeRemaining);
+
+                if (order.card != null)
+                    Destroy(order.card.gameObject);
 
                 activeOrders.RemoveAt(i);
 
-                Debug.Log("Order completed: " + recipe.recipeName);
+                Debug.Log(
+                    "Order completed: " + recipe.recipeName +
+                    " | Time remaining: " + timeLeft
+                );
 
                 return true;
             }

@@ -1,31 +1,14 @@
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class DeliveryStation : MonoBehaviour, IInteractable
 {
-    [Header("Score Values")]
-    [SerializeField] private int baseOrderValue = 500;
-    [SerializeField] private int timeBonus = 50;
-
     [Header("Debug")]
     [SerializeField] private bool debugLogging = true;
-    [SerializeField] private int debugPlayerId = 0;
 
-    [Header("Refs")]
+    [Header("References")]
     [SerializeField] private PointManager pointManager;
-
-    [Header("Order System")]
     [SerializeField] private OrderManager orderManager;
 
-    private void Update()
-    {
-        if (Keyboard.current != null && Keyboard.current.spaceKey.wasPressedThisFrame)
-        {
-            DebugTestDelivery();
-        }
-    }
-
- 
     public void Interact(PlayerInteraction player)
     {
         if (!player.IsHolding)
@@ -36,69 +19,62 @@ public class DeliveryStation : MonoBehaviour, IInteractable
         if (finalDish == null)
             return;
 
-        // Check whether this pizza matches an active order
+        PizzaRecipe recipe = finalDish.Recipe;
+
+        if (recipe == null)
+        {
+            Debug.LogWarning("This pizza has no recipe assigned!");
+            return;
+        }
+
+        // Check whether this pizza matches an active order.
+        bool matchedOrder = false;
+        int timeLeft = 0;
+
         if (orderManager != null)
         {
-            bool matchedOrder = orderManager.TryCompleteOrder(
-                finalDish.Recipe,
-                out int orderPoints
+            matchedOrder = orderManager.TryCompleteOrder(
+                recipe,
+                out timeLeft
             );
-
-            if (matchedOrder)
-            {
-                Debug.Log("Order completed! Points available: " + orderPoints);
-            }
-            else
-            {
-                Debug.Log("No matching active order!");
-            }
         }
         else
         {
-            Debug.LogError("OrderManager is not assigned!", this);
+            Debug.LogError("OrderManager reference is missing!", this);
         }
 
-        // Remove the delivered pizza
+        // Remove the delivered pizza.
         GameObject deliveredPizza = player.RemoveHeldObject();
 
         if (deliveredPizza != null)
-        {
             Destroy(deliveredPizza);
-            DeliverPizza(player.PlayerId);
-        }
-    }
 
-
-    private void DeliverPizza(int playerId)
-    {
-        if (pointManager == null)
+        // Only award points if the pizza matched an active order.
+        if (!matchedOrder)
         {
-            Debug.LogError("[DeliveryStation] PointManager reference is missing!");
+            Debug.Log("Pizza delivered, but no points awarded.");
             return;
         }
-        float baseOrderValue = 500;
-        float timeBonus = 50;   
 
-        int comboMultiplier = pointManager.GetComboMultiplier(playerId);
+        if (pointManager == null)
+        {
+            Debug.LogError("PointManager reference is missing!", this);
+            return;
+        }
 
-        float finalScore = (baseOrderValue + timeBonus) * comboMultiplier;
-
-        pointManager.AddFinalScore(playerId, finalScore);
+        pointManager.ApplyFinalScore(
+            player.PlayerId,
+            recipe,
+            timeLeft
+        );
 
         if (debugLogging)
         {
             Debug.Log(
-                $"[DeliveryStation] Player {playerId} DELIVERED | " +
-                $"({baseOrderValue} + {timeBonus}) * {comboMultiplier}x = {finalScore} final score");
+                $"[DeliveryStation] Player {player.PlayerId} delivered " +
+                $"{recipe.recipeName} | Recipe Points: {recipe.points} | " +
+                $"Time Left: {timeLeft}"
+            );
         }
-    }
-
-    private void DebugTestDelivery()
-    {
-        if (debugLogging)
-            Debug.Log("[DeliveryStation] DEBUG: Space pressed — simulating delivery for ALL players");
-
-        DeliverPizza(0);
-        DeliverPizza(1);
     }
 }
