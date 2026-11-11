@@ -29,6 +29,10 @@ public class Oven : MonoBehaviour, IInteractable
     private float cookingTimer;
     private bool isCooking;
 
+    public bool HasFinishedDish => finishedDish != null;
+    public bool IsCooking => isCooking;
+    public bool CanAcceptPlate => !isCooking && finishedDish == null;
+
     public void Interact(PlayerInteraction player)
     {
         // 1. PICK UP FINISHED DISH
@@ -231,7 +235,8 @@ public class Oven : MonoBehaviour, IInteractable
 
     private void FinishCooking()
     {
-        if (!isCooking) return;
+        if (!isCooking)
+            return;
 
         isCooking = false;
         waitingForConfirm = false;
@@ -243,14 +248,31 @@ public class Oven : MonoBehaviour, IInteractable
 
         Debug.Log("Pizza finished cooking!");
 
-        // Remove uncooked plate
+        // Remove the uncooked plate.
         if (plateCooking != null)
         {
             Destroy(plateCooking);
             plateCooking = null;
         }
 
-        // Spawn correct pizza or failed pizza
+        // Make sure we have a pizza prefab.
+        if (resultPizzaPrefab == null)
+        {
+            Debug.LogError("No pizza prefab was selected!");
+            return;
+        }
+
+        // Instantiate the correct pizza.
+        finishedDish = Instantiate(
+            resultPizzaPrefab,
+            dishSpawnPoint.position,
+            resultPizzaPrefab.transform.rotation
+        );
+
+        // Keep the pizza attached to the oven.
+        finishedDish.transform.SetParent(transform);
+
+        // Assign its recipe so the DeliveryStation knows what was delivered.
         FinalDish finalDish = finishedDish.GetComponent<FinalDish>();
 
         if (finalDish != null)
@@ -262,6 +284,9 @@ public class Oven : MonoBehaviour, IInteractable
             Debug.LogError("Finished pizza prefab is missing FinalDish!");
         }
 
+        Debug.Log("Spawned pizza: " + resultRecipe?.recipeName);
+
+        // Clear stored recipe information.
         resultPizzaPrefab = null;
         resultRecipe = null;
     }

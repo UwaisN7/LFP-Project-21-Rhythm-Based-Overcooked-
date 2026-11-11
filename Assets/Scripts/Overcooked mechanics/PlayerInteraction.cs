@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.InputSystem;
+using System.Collections.Generic;
 
 // --- MODIFIED: Added IInteractable so players can interact with each other ---
 public class PlayerInteraction : MonoBehaviour, IInteractable
@@ -11,6 +12,9 @@ public class PlayerInteraction : MonoBehaviour, IInteractable
 
     public bool IsHolding => heldObject != null;
     public int PlayerId;
+
+    private HashSet<IInteractable> nearbyInteractables =
+    new HashSet<IInteractable>();
 
     private Outline currentOutline;
 
@@ -212,6 +216,8 @@ public class PlayerInteraction : MonoBehaviour, IInteractable
         heldObject = objectToPickup;
         objectToPickup.transform.SetParent(holdPoint);
         objectToPickup.transform.localPosition = Vector3.zero;
+
+        RefreshBestInteractable();
     }
 
     public GameObject PlaceHeldObject(Transform placementPoint)
@@ -221,7 +227,11 @@ public class PlayerInteraction : MonoBehaviour, IInteractable
         heldObject = null;
         objectToPlace.transform.SetParent(placementPoint);
         objectToPlace.transform.localPosition = Vector3.zero;
+
+        RefreshBestInteractable();
         return objectToPlace;
+
+     
     }
 
     private void Drop()
@@ -229,12 +239,170 @@ public class PlayerInteraction : MonoBehaviour, IInteractable
         heldObject.transform.SetParent(null);
         heldObject.transform.position = transform.position + transform.forward;
         heldObject = null;
+
+        RefreshBestInteractable();
     }
 
     public GameObject RemoveHeldObject()
     {
         GameObject objectToRemove = heldObject;
         heldObject = null;
+
+        RefreshBestInteractable();
+
         return objectToRemove;
+    }
+
+    public void RegisterInteractable(IInteractable interactable)
+    {
+        if (interactable == null)
+            return;
+
+        nearbyInteractables.Add(interactable);
+        RefreshBestInteractable();
+    }
+
+    public void UnregisterInteractable(IInteractable interactable)
+    {
+        if (interactable == null)
+            return;
+
+        nearbyInteractables.Remove(interactable);
+        RefreshBestInteractable();
+    }
+
+    private void RefreshBestInteractable()
+    {
+        IInteractable bestInteractable = null;
+        int bestPriority = int.MaxValue;
+        float closestDistance = float.MaxValue;
+
+        foreach (IInteractable interactable in nearbyInteractables)
+        {
+            int priority = GetInteractionPriority(interactable);
+
+            if (priority == int.MaxValue)
+                continue;
+
+            Component component = interactable as Component;
+
+            if (component == null)
+                continue;
+
+            float distance = Vector3.Distance(
+                transform.position,
+                component.transform.position
+            );
+
+            if (priority < bestPriority ||
+                (priority == bestPriority && distance < closestDistance))
+            {
+                bestPriority = priority;
+                closestDistance = distance;
+                bestInteractable = interactable;
+            }
+        }
+
+        SetInteractable(bestInteractable);
+    }
+
+    private int GetInteractionPriority(IInteractable interactable)
+    {
+        // Check what the player is holding.
+        Plate heldPlate = heldObject != null
+            ? heldObject.GetComponent<Plate>()
+            : null;
+
+        Ingredient heldIngredient = heldObject != null
+            ? heldObject.GetComponent<Ingredient>()
+            : null;
+
+        FinalDish heldDish = heldObject != null
+            ? heldObject.GetComponent<FinalDish>()
+            : null;
+
+        // PRIORITIES WHEN HOLDING NOTHING
+        if (!IsHolding)
+        {
+            // Finished pizza at the oven.
+            if (interactable is Oven oven && oven.HasFinishedDish)
+                return 1;
+
+            // Chopped ingredient at the chopping board.
+            if (interactable is ChoppingBoard board &&
+                board.HasChoppedIngredient)
+                return 1;
+
+            // Counter containing a plate.
+            if (interactable is Counter counter && counter.HasPlate)
+                return 2;
+
+            if (interactable is PlateBox)
+                return 3;
+
+            // Unchopped ingredient on the chopping board:
+            // lets the player start the chopping rhythm interaction.
+            if (interactable is ChoppingBoard rawBoard &&
+                rawBoard.HasIngredient)
+                return 4;
+
+            // Ingredient station.
+            if (interactable is IngredientBox)
+                return 5;
+
+            // Counter containing a loose ingredient.
+            if (interactable is Counter ingredientCounter &&
+                ingredientCounter.HasLooseIngredient)
+                return 6;
+
+            // Loose ingredient on the floor.
+            if (interactable is Ingredient)
+                return 7;
+        }
+
+        // PRIORITIES WHEN HOLDING AN EMPTY PLATE
+        if (heldPlate != null && heldPlate.IsEmpty)
+        {
+            if (interactable is Counter emptyCounter &&
+                emptyCounter.IsEmpty)
+                return 1;
+        }
+
+        // PRIORITIES WHEN HOLDING A RAW INGREDIENT
+        if (heldIngredient != null &&
+            heldIngredient.State == IngredientState.Raw)
+        {
+            if (interactable is ChoppingBoard availableBoard &&
+                availableBoard.CanAcceptIngredient)
+                return 1;
+        }
+
+        // PRIORITIES WHEN HOLDING A CHOPPED INGREDIENT
+        if (heldIngredient != null &&
+            heldIngredient.State == IngredientState.Chopped)
+        {
+            if (interactable is Counter plateCounter &&
+                plateCounter.HasPlate)
+                return 1;
+
+            if (interactable is Counter availableCounter &&
+                availableCounter.IsEmpty)
+                return 2;
+        }
+
+        // PRIORITIES WHEN HOLDING A PLATE WITH INGREDIENTS
+        if (heldPlate != null && heldPlate.HasUncookedPizza)
+        {
+            if (interactable is Oven availableOven &&
+                availableOven.CanAcceptPlate)
+                return 1;
+        }
+
+        // PRIORITY WHEN HOLDING A FINISHED PIZZA
+        if (heldDish != null && interactable is DeliveryStation)
+            return 1;
+
+        // All other interactables remain available as fallbacks.
+        return 100;
     }
 }

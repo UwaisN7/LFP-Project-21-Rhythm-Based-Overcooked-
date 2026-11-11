@@ -19,6 +19,10 @@ public class Plate : MonoBehaviour, IInteractable
     private HashSet<IngredientType> addedIngredients =
         new HashSet<IngredientType>();
 
+    public bool IsEmpty => addedIngredients.Count == 0;
+
+    public bool HasUncookedPizza => addedIngredients.Count > 0;
+
     public void Interact(PlayerInteraction player)
     {
         // Pick up the plate

@@ -9,7 +9,15 @@ public class ChoppingBoard : MonoBehaviour, IInteractable
     private bool waitingForStart;
     private bool handled;
 
-    
+    public bool HasIngredient => ingredient != null;
+
+    public bool HasChoppedIngredient =>
+        ingredient != null &&
+        ingredient.GetComponent<Ingredient>()?.State == IngredientState.Chopped;
+
+    public bool CanAcceptIngredient => ingredient == null;
+
+
 
     public void Interact(PlayerInteraction player)
     {

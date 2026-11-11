@@ -6,6 +6,16 @@ public class Counter : MonoBehaviour, IInteractable
 
     private GameObject objectOnCounter;
 
+    public bool IsEmpty => objectOnCounter == null;
+
+    public bool HasPlate =>
+        objectOnCounter != null &&
+        objectOnCounter.GetComponent<Plate>() != null;
+
+    public bool HasLooseIngredient =>
+        objectOnCounter != null &&
+        objectOnCounter.GetComponent<Ingredient>() != null;
+
     public void Interact(PlayerInteraction player)
     {
         // COUNTER IS EMPTY
