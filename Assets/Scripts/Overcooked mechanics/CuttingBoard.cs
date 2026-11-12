@@ -48,11 +48,21 @@ public class ChoppingBoard : MonoBehaviour, IInteractable
         }
         if (!player.IsHolding && ingredient != null)
         {
+            Ingredient ingredientScript = ingredient.GetComponent<Ingredient>();
+
+            // Only allow pickup after chopping is complete.
+            if (ingredientScript == null ||
+                ingredientScript.State != IngredientState.Chopped)
+            {
+                return;
+            }
+
             GameObject toPickup = ingredient;
             ingredient = null;
             waitingForStart = false;
             waitingPlayer = null;
-            toPickup.transform.SetParent(null, true); 
+
+            toPickup.transform.SetParent(null, true);
             player.Pickup(toPickup);
         }
     }

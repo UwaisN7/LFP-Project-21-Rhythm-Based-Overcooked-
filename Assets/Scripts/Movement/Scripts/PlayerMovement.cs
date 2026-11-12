@@ -49,6 +49,7 @@ public class PlayerMovement : MonoBehaviour
     public void OnMove(InputValue value)
     {
         moveInput = value.Get<Vector2>();
+      
     }
 
     // --- NEW: STEAL MECHANIC ADDITIONS ---
