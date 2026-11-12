@@ -152,37 +152,26 @@ public class PlayerInteraction : MonoBehaviour, IInteractable
         if (!value.isPressed)
             return;
 
-        // If we are holding something and the current interactable
-        // is NOT an ingredient, interact with it.
-        if (heldObject != null && currentInteractable != null)
+        if (currentInteractable != null)
         {
-            Component component = currentInteractable as Component;
+            // Remember what we were holding before interacting.
+            GameObject objectBeforeInteraction = heldObject;
 
-            if (component != null && component.gameObject.layer != LayerMask.NameToLayer("Ingredient"))
-            {
-                currentInteractable.Interact(this);
-                return;
-            }
-        }
-
-        // --- MODIFIED: Ensure we check if the currentInteractable is another player first before dropping ---
-        if (heldObject == null && currentInteractable != null)
-        {
             currentInteractable.Interact(this);
+
+            // If the interaction didn't use, place, or change
+            // the held object, allow the player to drop it.
+            if (heldObject == objectBeforeInteraction && heldObject != null)
+            {
+                Drop();
+            }
+
             return;
         }
 
-        // If we're holding something and there's no station (or player) to interact with, drop it.
         if (heldObject != null)
         {
             Drop();
-            return;
-        }
-
-        // If we're not holding anything, interact normally.
-        if (currentInteractable != null)
-        {
-            currentInteractable.Interact(this);
         }
     }
 
@@ -236,9 +225,15 @@ public class PlayerInteraction : MonoBehaviour, IInteractable
 
     private void Drop()
     {
-        heldObject.transform.SetParent(null);
-        heldObject.transform.position = transform.position + transform.forward;
+        if (heldObject == null)
+            return;
+
+        GameObject objectToDrop = heldObject;
+
         heldObject = null;
+
+        objectToDrop.transform.SetParent(null);
+        objectToDrop.transform.position = transform.position + transform.forward;
 
         RefreshBestInteractable();
     }
@@ -305,7 +300,6 @@ public class PlayerInteraction : MonoBehaviour, IInteractable
 
         SetInteractable(bestInteractable);
     }
-
     private int GetInteractionPriority(IInteractable interactable)
     {
         // Check what the player is holding.
@@ -321,7 +315,10 @@ public class PlayerInteraction : MonoBehaviour, IInteractable
             ? heldObject.GetComponent<FinalDish>()
             : null;
 
+
+        // ==========================================
         // PRIORITIES WHEN HOLDING NOTHING
+        // ==========================================
         if (!IsHolding)
         {
             // Finished pizza at the oven.
@@ -337,72 +334,97 @@ public class PlayerInteraction : MonoBehaviour, IInteractable
             if (interactable is Counter counter && counter.HasPlate)
                 return 2;
 
+            // Plate box.
             if (interactable is PlateBox)
                 return 3;
 
-            // Unchopped ingredient on the chopping board:
-            // lets the player start the chopping rhythm interaction.
-            if (interactable is ChoppingBoard rawBoard &&
-                rawBoard.HasIngredient)
+            // Ingredient box.
+            if (interactable is IngredientBox)
                 return 4;
 
-            // Ingredient station.
-            if (interactable is IngredientBox)
+            // Raw ingredient waiting to be chopped.
+            if (interactable is ChoppingBoard rawBoard &&
+                rawBoard.HasIngredient)
                 return 5;
-
-            // Counter containing a loose ingredient.
-            if (interactable is Counter ingredientCounter &&
-                ingredientCounter.HasLooseIngredient)
-                return 6;
 
             // Loose ingredient on the floor.
             if (interactable is Ingredient)
-                return 7;
+                return 6;
         }
 
+
+        // ==========================================
         // PRIORITIES WHEN HOLDING AN EMPTY PLATE
+        // ==========================================
         if (heldPlate != null && heldPlate.IsEmpty)
         {
+            // Prefer an empty counter.
             if (interactable is Counter emptyCounter &&
                 emptyCounter.IsEmpty)
                 return 1;
         }
 
+
+        // ==========================================
         // PRIORITIES WHEN HOLDING A RAW INGREDIENT
+        // ==========================================
         if (heldIngredient != null &&
             heldIngredient.State == IngredientState.Raw)
         {
+            // Prefer an available chopping board.
             if (interactable is ChoppingBoard availableBoard &&
                 availableBoard.CanAcceptIngredient)
                 return 1;
         }
 
+
+        // ==========================================
         // PRIORITIES WHEN HOLDING A CHOPPED INGREDIENT
+        // ==========================================
         if (heldIngredient != null &&
             heldIngredient.State == IngredientState.Chopped)
         {
+            // Prefer a counter with a plate.
             if (interactable is Counter plateCounter &&
                 plateCounter.HasPlate)
                 return 1;
-
-            if (interactable is Counter availableCounter &&
-                availableCounter.IsEmpty)
-                return 2;
         }
 
+
+        // ==========================================
         // PRIORITIES WHEN HOLDING A PLATE WITH INGREDIENTS
+        // ==========================================
         if (heldPlate != null && heldPlate.HasUncookedPizza)
         {
+            // Prefer an available oven.
             if (interactable is Oven availableOven &&
                 availableOven.CanAcceptPlate)
                 return 1;
         }
 
-        // PRIORITY WHEN HOLDING A FINISHED PIZZA
-        if (heldDish != null && interactable is DeliveryStation)
-            return 1;
 
-        // All other interactables remain available as fallbacks.
+        // ==========================================
+        // PRIORITIES WHEN HOLDING A FINISHED PIZZA
+        // ==========================================
+        if (heldDish != null)
+        {
+            if (interactable is DeliveryStation)
+                return 1;
+        }
+
+
+        // ==========================================
+        // COUNTERS AS A FALLBACK
+        // ==========================================
+        // Counters remain interactable regardless of what
+        // the player is holding, but have lower priority.
+        if (interactable is Counter)
+            return 10;
+
+
+        // ==========================================
+        // OTHER INTERACTABLES AS A FALLBACK
+        // ==========================================
         return 100;
     }
 }
