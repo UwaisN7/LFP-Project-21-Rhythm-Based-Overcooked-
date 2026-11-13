@@ -1037,7 +1037,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 210, y: 448}
+  m_AnchoredPosition: {x: 210, y: 460}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1519408135
@@ -1068,8 +1068,9 @@ MonoBehaviour:
 
 
 
-    Make sure that you have 2 controllers
-    connected in this scene before pressing play'
+    This is a controller only game please
+    make sure you have atleast 1 connected before proceeding any controller works,
+    the blocks will light up green'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1135,7 +1136,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: -202.54108, y: 0, z: 0, w: -118.44294}
+  m_margin: {x: -314.58005, y: 0, z: -44.36654, w: -118.44294}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -1207,7 +1208,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4386532967376824671, guid: ef523d238c2238c4291ff93eafba0541, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -80.364
+      value: -12.434006
       objectReference: {fileID: 0}
     - target: {fileID: 4391534962605650859, guid: ef523d238c2238c4291ff93eafba0541, type: 3}
       propertyPath: m_LocalScale.x
@@ -1223,7 +1224,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4391534962605650859, guid: ef523d238c2238c4291ff93eafba0541, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 204.36
+      value: 272.28998
       objectReference: {fileID: 0}
     - target: {fileID: 4763217067789101813, guid: ef523d238c2238c4291ff93eafba0541, type: 3}
       propertyPath: m_IsActive
@@ -1243,7 +1244,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4886401767251991632, guid: ef523d238c2238c4291ff93eafba0541, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 202.07
+      value: 270
       objectReference: {fileID: 0}
     - target: {fileID: 5067159886556346636, guid: ef523d238c2238c4291ff93eafba0541, type: 3}
       propertyPath: m_LocalScale.x
@@ -1259,7 +1260,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5067159886556346636, guid: ef523d238c2238c4291ff93eafba0541, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 59.704
+      value: 127.63399
       objectReference: {fileID: 0}
     - target: {fileID: 5467701534082897914, guid: ef523d238c2238c4291ff93eafba0541, type: 3}
       propertyPath: m_text

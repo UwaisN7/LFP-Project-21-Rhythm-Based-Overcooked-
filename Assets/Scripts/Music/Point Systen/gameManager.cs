@@ -140,12 +140,12 @@ SetState(GameState.PreGame);
 
         if (red > blue)
         {
-            resultText.text = "Red Player Wins!";
+            resultText.text = "Red Player Wins! You can ALT+F4 thanks";
             resultText.color = Color.red;
         }
         else if (blue > red)
         {
-            resultText.text = "Blue Player Wins!";
+            resultText.text = "Blue Player Wins! You can ALT+F4 thanks";
             resultText.color = Color.blue;
         }
         else

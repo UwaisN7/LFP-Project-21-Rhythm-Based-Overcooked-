@@ -2661,7 +2661,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e7bb0ffe93bac0449cf7ce2396c6c3b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  message: See that box over there? Go up to it and press A to interact
+  message: See that box over there? Go up to it and press A to interact, (For future
+    reference i am talking about the button mapping on the Xbox Controller)
   dialogueUI: {fileID: 312907416}
   playerTag: Player
   triggerOnlyOnce: 1
@@ -4551,7 +4552,6 @@ MonoBehaviour:
   controlsPanel: {fileID: 0}
   playButton: {fileID: 0}
   resumeButton: {fileID: 0}
-  controlsButton: {fileID: 0}
   exitButton: {fileID: 0}
   controlsBackButton: {fileID: 0}
   titleText: {fileID: 0}
@@ -6817,7 +6817,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: '::'
   message: 'Notice the number at the bottom right, thats your combo meter affected
-    by actions you do in the game, cook well and to the rhythm you get a hugher multiplier
+    by actions you do in the game, cook well and to the rhythm you get a higher multiplier
     but beware the difficulty also increases which is risky, hitting early does not
     mean minus points so dont despair.  '
   dialogueUI: {fileID: 312907416}
@@ -10393,10 +10393,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9e7bb0ffe93bac0449cf7ce2396c6c3b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: '::'
-  message: Oh and one last tip, if your opponent is holding an ingredient you can
+  message: 'Oh and one last tip, if your opponent is holding an ingredient you can
     go up to them and press A to attempt to steal it from them but be careful the
     minigame is intense and you both could lose your combos, now go ahead and press
-    A next to that submit station and walk on to go back to the menu
+    A next to that submit station and walk on to go back to the menu, and press X
+    to shove them if they are in the way. '
   dialogueUI: {fileID: 312907416}
   playerTag: Player
   triggerOnlyOnce: 1
